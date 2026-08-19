@@ -11,11 +11,13 @@ import BookPoojaModal      from './PoojaBooking/BookPoojaModal';
 import { BookPoojaProvider, useBookPooja } from './BookPoojaContext';
 import DrawEntryModal      from './DrawEntry/DrawEntryModal';
 import { DrawEntryProvider, useDrawEntry } from './DrawEntry/DrawEntryContext';
+import TempleDetailDonationModal from './TempleDetailDonationModal';
 import OverviewSection     from './sections/OverviewSection';
 import EventsSection       from './sections/EventsSection';
 import HistorySection      from './sections/HistorySection';
 import FestivalsSection    from './sections/FestivalsSection';
 import AccommodationSection from './sections/AccommodationSection';
+import DonationSection     from './sections/DonationSection';
 import ThreeSixtySection   from './sections/ThreeSixtySection';
 import LiveSection         from './sections/LiveSection';
 import FacilitiesSection   from './sections/FacilitiesSection';
@@ -31,6 +33,7 @@ export const DETAIL_SECTIONS = [
   { id: 'events',      labelKey: 'events'      },
   { id: 'festivals',   labelKey: 'festivals'   },
   { id: 'accommodation', labelKey: 'accommodation' },
+  { id: 'donation',    labelKey: 'donation'    },
   { id: 'history',     labelKey: 'history'     },
   { id: 'threesixty',  labelKey: 'threesixty'  },
   { id: 'live',        labelKey: 'live'        },
@@ -53,6 +56,7 @@ function TempleDetailInner({ temple }: { temple: Temple }) {
   const { isOpen, close } = useBookPooja();
   const draw = useDrawEntry();
   const [activeSection, setActiveSection] = useState<string>('overview');
+  const [donationOpen, setDonationOpen] = useState(false);
 
   // Track which section is in view (scrollspy)
   useEffect(() => {
@@ -103,6 +107,7 @@ function TempleDetailInner({ temple }: { temple: Temple }) {
             <EventsSection      temple={temple} />
             <FestivalsSection   temple={temple} />
             <AccommodationSection />
+            <DonationSection    templeName={temple.name} onOpenDonation={() => setDonationOpen(true)} />
             <HistorySection     temple={temple} />
             <ThreeSixtySection  temple={temple} />
             <LiveSection        temple={temple} />
@@ -124,6 +129,13 @@ function TempleDetailInner({ temple }: { temple: Temple }) {
 
       {/* Book Pooja / Darshan modal (opened from Overview button + mobile action bar) */}
       <BookPoojaModal open={isOpen} onClose={close} temple={temple} />
+
+      {/* Donation modal (opened from the Donation section CTA) */}
+      <TempleDetailDonationModal
+        open={donationOpen}
+        temple={temple}
+        onClose={() => setDonationOpen(false)}
+      />
 
       {/* Enter-the-Draw modal (opened from the announcement strip CTA) */}
       <DrawEntryModal
