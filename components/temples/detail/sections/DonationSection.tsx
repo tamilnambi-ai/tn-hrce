@@ -34,10 +34,10 @@ export default function DonationSection({
           </div>
           <div className="flex-1 min-w-0">
             <h3 className={cn('text-[16px] md:text-[18px] font-bold text-[--color-text-primary]', taClass)}>
-              {t(lang, 'templeDetail.donation.heading')}
+              {t(lang, 'templeDetail.donationSection.heading')}
             </h3>
             <p className={cn('text-[13px] md:text-[14px] text-[--color-text-secondary] mt-1 leading-relaxed max-w-[560px]', taClass)}>
-              {t(lang, 'templeDetail.donation.hint', { temple: templeName })}
+              {t(lang, 'templeDetail.donationSection.hint', { temple: templeName })}
             </p>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function DonationSection({
             taClass,
           )}
         >
-          {t(lang, 'templeDetail.donation.cta')}
+          {t(lang, 'templeDetail.donationSection.cta')}
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

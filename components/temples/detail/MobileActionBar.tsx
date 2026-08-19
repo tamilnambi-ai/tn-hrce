@@ -5,15 +5,17 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { t } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { useBookPooja } from './BookPoojaContext';
+import { useDonation } from './DonationContext';
 
 export default function MobileActionBar() {
   const { lang } = useLanguage();
   const { open: openBooking } = useBookPooja();
+  const { open: openDonation } = useDonation();
   const taClass = lang === 'ta' ? 'ta-text' : '';
 
   const items = [
     { icon: TicketCheck, key: 'booking',       tint: 'text-[--color-site-name]', onClick: openBooking },
-    { icon: HandCoins,   key: 'donation',      tint: 'text-emerald-600',         onClick: () => {} },
+    { icon: HandCoins,   key: 'donation',      tint: 'text-emerald-600',         onClick: openDonation },
     { icon: BedDouble,   key: 'accommodation', tint: 'text-amber-600',           onClick: () => {} },
   ];
 

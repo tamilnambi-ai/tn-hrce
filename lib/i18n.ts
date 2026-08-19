@@ -244,7 +244,8 @@ export const translations = {
       booking:         'Temple Bookings',
       bookingCta:      'Book Pooja / Darshan',
       bookingHint:     'Skip the queue with online booking',
-      donation: {
+      donation:        'Donate',
+      donationSection: {
         heading:  'Support the Temple',
         hint:     'Contribute to {temple}\'s daily services, maintenance, and sacred activities',
         cta:      'Make an Offering',
@@ -638,7 +639,8 @@ export const translations = {
       booking:         'கோயில் முன்பதிவு',
       bookingCta:      'பூஜை / தரிசன முன்பதிவு',
       bookingHint:     'வரிசையை தவிர்த்து ஆன்லைன் முன்பதிவு',
-      donation: {
+      donation:        'நன்கொடை',
+      donationSection: {
         heading:  'கோயிலுக்கு ஆதரவளியுங்கள்',
         hint:     '{temple}ன் தினசரி பூஜை, பராமரிப்பு மற்றும் சடங்குகளுக்கு பங்களிக்கவும்',
         cta:      'நன்கொடை அளிக்க',
