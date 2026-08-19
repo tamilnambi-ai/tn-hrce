@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   DESIGN TOKENS
+   One place to swap the entire colour scheme.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* ── Brand palette (dark maroon) ── */
+  --token-brand-primary:        #8B1A1A;   /* deep maroon – primary actions */
+  --token-brand-primary-hover:  #6E1414;
+  --token-brand-primary-light:  #FDF0F0;   /* very light tint – icon backgrounds */
+  --token-brand-accent:         #B5451B;   /* warm secondary CTA */
+
+  /* ── Neutral scale ── */
+  --token-neutral-0:   #FFFFFF;
+  --token-neutral-50:  #F7F7F7;
+  --token-neutral-100: #EBEBEB;
+  --token-neutral-200: #E0E0E0;
+  --token-neutral-300: #C2C2C2;
+  --token-neutral-400: #9E9E9E;
+  --token-neutral-500: #717171;
+  --token-neutral-600: #484848;
+  --token-neutral-900: #1A1A1A;
+
+  /* ── Semantic roles ── */
+  --color-background:       var(--token-neutral-0);
+  --color-surface:          var(--token-neutral-0);
+  --color-surface-muted:    var(--token-neutral-50);
+  --color-border:           var(--token-neutral-200);
+  --color-border-strong:    var(--token-neutral-300);
+  --color-text-primary:     var(--token-neutral-900);
+  --color-text-secondary:   var(--token-neutral-500);
+  --color-text-muted:       var(--token-neutral-400);
+
+  /* ── Component tokens ── */
+  --color-header-bg:          var(--token-neutral-0);
+  --color-header-border:      var(--token-neutral-200);
+  --color-site-name:          var(--token-brand-primary);
+
+  --color-nav-link:           var(--token-neutral-600);
+  --color-nav-link-hover:     var(--token-neutral-900);
+
+  --color-btn-primary-bg:     var(--token-brand-primary);
+  --color-btn-primary-text:   var(--token-neutral-0);
+  --color-btn-primary-hover:  var(--token-brand-primary-hover);
+
+  --color-quick-icon-bg:      var(--token-brand-primary-light);
+  --color-quick-icon:         var(--token-brand-primary);
+
+  --color-card-title:         var(--token-neutral-900);
+  --color-card-meta:          var(--token-neutral-500);
+
+  --color-section-title:      var(--token-neutral-900);
+  --color-section-link:       var(--token-brand-primary);
+
+  --color-location-state:     var(--token-brand-primary);
+  --color-location-city:      var(--token-neutral-900);
+
+  --color-lang-active:        var(--token-brand-primary);
+  --color-lang-inactive:      var(--token-neutral-500);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FONTS  — DM Sans (premium, geometric, closest to Airbnb Circular)
+   ───────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Noto+Serif+Tamil:wght@400;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+.ta-text {
+  font-family: 'Noto Serif Tamil', serif;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LAYOUT UTILITIES
+   ───────────────────────────────────────────────────────────── */
+.container-page {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+@media (min-width: 768px) {
+  .container-page { padding-inline: 48px; }
+}
+@media (min-width: 1024px) {
+  .container-page { padding-inline: 80px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TYPOGRAPHY
+   ───────────────────────────────────────────────────────────── */
+.section-title {
+  font-size: 1.375rem;   /* 22px */
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--color-section-title);
+  line-height: 1.2;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CARD — Airbnb-style (image-first, no border/shadow wrapper)
+   ───────────────────────────────────────────────────────────── */
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.card-root:hover .card-img {
+  transform: scale(1.04);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SEARCH ANIMATIONS
+   ───────────────────────────────────────────────────────────── */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.search-dropdown {
+  animation: slideDown 0.16s ease-out;
+}
+
+/* City-switch fade — applied via key={city.id} on section wrappers */
+@keyframes cityFade {
+  from { opacity: 0.35; transform: translateY(4px); }
+  to   { opacity: 1;    transform: translateY(0);   }
+}
+.city-fade {
+  animation: cityFade 0.28s ease-out;
+}
+
+/* Welcome modal enter — subtle scale-in */
+@keyframes welcomeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+.animate-welcomeIn { animation: welcomeIn 0.24s ease-out; }
+
+/* Hide scrollbar but keep scroll functional (used by sticky tab nav) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Give in-page anchors headroom below the two sticky bars */
+section[data-anchor] { scroll-margin-top: 140px; }
+
+/* Continuous soft pulse for donate CTA */
+@keyframes donatePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55), 0 4px 14px rgba(16,185,129,0.28); }
+  50%      { box-shadow: 0 0 0 8px rgba(16,185,129,0),    0 6px 20px rgba(16,185,129,0.32); }
+}
+.donate-pulse {
+  animation: donatePulse 1.8s ease-in-out infinite;
+}
+.donate-pulse:hover { animation-play-state: paused; }
+
+/* Smooth ring for the selected amount option */
+@keyframes donateSelectRing {
+  from { transform: scale(0.98); }
+  to   { transform: scale(1); }
+}
+.donate-option-selected {
+  animation: donateSelectRing 0.18s ease-out;
+}
+
+/* Floating announcement card — slides up from the bottom on mount */
+@keyframes announcementIn {
+  from { opacity: 0; transform: translate(-50%, 24px); }
+  to   { opacity: 1; transform: translate(-50%, 0);    }
+}
+.animate-announcementIn {
+  animation: announcementIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SCROLLBAR
+   ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar            { width: 5px; }
+::-webkit-scrollbar-track      { background: transparent; }
+::-webkit-scrollbar-thumb      { background: var(--token-neutral-300); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--token-neutral-400); }

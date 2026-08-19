@@ -1,0 +1,320 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// STATIC EVENT DATA  —  Multi-city, bilingual (EN + TA)
+// ⚠ Demo events only. Not verified government information.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface TempleEvent {
+  id: string;
+  title:            string; titleTa?:            string;
+  templeShortName:  string; templeShortNameTa?:  string;
+  area:             string; areaTa?:             string;
+  city: string;
+  dateLabel:        string; dateLabelTa?:        string;
+  timeLabel:        string; timeLabelTa?:        string;
+  description:      string; descriptionTa?:      string;
+  badgeLabel:       string; badgeLabelTa?:       string;
+  imageUrl: string;
+  gradientFrom: string;
+  gradientTo: string;
+}
+
+const U = (id: string) =>
+  `https://images.unsplash.com/${id}?w=800&h=560&fit=crop&q=80&auto=format`;
+
+// ── Tamil badge labels (shared) ───────────────────────────────────────────────
+const BADGE_TA: Record<string, string> = {
+  Festival: 'திருவிழா',
+  Utsavam:  'உற்சவம்',
+  Viratham: 'விரதம்',
+  Puja:     'பூஜை',
+  Other:    'பிற',
+};
+
+export const events: TempleEvent[] = [
+  // ── Chennai ────────────────────────────────────────────────────────────────
+  {
+    id: 'aadi-amavasai',
+    title: 'Aadi Amavasai Thiruvandam',
+    titleTa: 'ஆடி அமாவாசை திருவந்தம்',
+    templeShortName: 'Kapaleeswarar Temple',
+    templeShortNameTa: 'கபாலீஸ்வரர் கோயில்',
+    area: 'Mylapore', areaTa: 'மயிலாப்பூர்', city: 'chennai',
+    dateLabel: 'Fri, 16 Aug', dateLabelTa: 'வெள்ளி, 16 ஆவணி',
+    timeLabel: '5:30 AM onwards', timeLabelTa: 'காலை 5:30 முதல்',
+    description: 'Sacred ancestor-honouring ceremony. Special abhishekam and homam performed at the main sanctum.',
+    descriptionTa: 'மூதாதையர்களை வணங்கும் புனித விழா. மூலவர் சன்னதியில் சிறப்பு அபிஷேகமும் ஹோமமும் நடைபெறும்.',
+    badgeLabel: 'Festival', badgeLabelTa: BADGE_TA.Festival,
+    imageUrl: U('photo-1595165989697-6c57f7536758'),
+    gradientFrom: '#1A3E6B', gradientTo: '#0A2040',
+  },
+  {
+    id: 'kanda-sashti',
+    title: 'Kanda Sashti Utsavam',
+    titleTa: 'கந்த சஷ்டி உற்சவம்',
+    templeShortName: 'Vadapalani Andavar Temple',
+    templeShortNameTa: 'வடபழனி ஆண்டவர் கோயில்',
+    area: 'Vadapalani', areaTa: 'வடபழனி', city: 'chennai',
+    dateLabel: 'Sat, 17 Aug', dateLabelTa: 'சனி, 17 ஆவணி',
+    timeLabel: '7:00 AM – 12:00 PM', timeLabelTa: 'காலை 7:00 – நண்பகல் 12:00',
+    description: "Six-day festival celebrating Lord Murugan's victory. Procession and special pujas conducted.",
+    descriptionTa: 'முருகப் பெருமானின் வெற்றியைக் கொண்டாடும் ஆறு நாள் திருவிழா. ஊர்வலமும் சிறப்பு பூஜைகளும் நடைபெறும்.',
+    badgeLabel: 'Utsavam', badgeLabelTa: BADGE_TA.Utsavam,
+    imageUrl: U('photo-1762966160822-556deeff018d'),
+    gradientFrom: '#8B3208', gradientTo: '#5A1E05',
+  },
+  {
+    id: 'varalakshmi-viratham',
+    title: 'Varalakshmi Viratham Pooja',
+    titleTa: 'வரலட்சுமி விரத பூஜை',
+    templeShortName: 'Angala Parameswari Temple',
+    templeShortNameTa: 'அங்காள பரமேஸ்வரி கோயில்',
+    area: 'Vadapalani', areaTa: 'வடபழனி', city: 'chennai',
+    dateLabel: 'Sun, 18 Aug', dateLabelTa: 'ஞாயிறு, 18 ஆவணி',
+    timeLabel: '8:00 AM – 1:00 PM', timeLabelTa: 'காலை 8:00 – மதியம் 1:00',
+    description: 'Auspicious fasting day with special deity decoration. Sahasranama archana offered to Goddess.',
+    descriptionTa: 'சிறப்பு அலங்காரத்துடன் கூடிய விரத நாள். அம்பாளுக்கு சகஸ்ரநாம அர்ச்சனை நடைபெறும்.',
+    badgeLabel: 'Viratham', badgeLabelTa: BADGE_TA.Viratham,
+    imageUrl: U('photo-1768406091087-7fb0d03f6064'),
+    gradientFrom: '#7A1A60', gradientTo: '#4A0E3A',
+  },
+
+  // ── Trichy ─────────────────────────────────────────────────────────────────
+  {
+    id: 'vaikunta-ekadasi-trichy',
+    title: 'Vaikunta Ekadasi Utsavam',
+    titleTa: 'வைகுண்ட ஏகாதசி உற்சவம்',
+    templeShortName: 'Ranganathaswamy Temple',
+    templeShortNameTa: 'ரங்கநாதசுவாமி கோயில்',
+    area: 'Srirangam', areaTa: 'ஸ்ரீரங்கம்', city: 'trichy',
+    dateLabel: 'Mon, 19 Aug', dateLabelTa: 'திங்கள், 19 ஆவணி',
+    timeLabel: '4:00 AM onwards', timeLabelTa: 'அதிகாலை 4:00 முதல்',
+    description: 'Grand annual festival marking the opening of Paramapada Vasal. Thousands attend the sacred event.',
+    descriptionTa: 'பரமபத வாசல் திறக்கப்படும் ஆண்டு விழா. ஆயிரக்கணக்கான பக்தர்கள் கலந்துகொள்வர்.',
+    badgeLabel: 'Festival', badgeLabelTa: BADGE_TA.Festival,
+    imageUrl: U('photo-1705723116788-d11fa6e3f415'),
+    gradientFrom: '#8B3208', gradientTo: '#5A1E05',
+  },
+  {
+    id: 'aani-brahmotsavam-trichy',
+    title: 'Aani Brahmotsavam',
+    titleTa: 'ஆனி பிரம்மோற்சவம்',
+    templeShortName: 'Jambukeswarar Temple',
+    templeShortNameTa: 'ஜம்புகேஸ்வரர் கோயில்',
+    area: 'Thiruvanaikaval', areaTa: 'திருவானைக்காவல்', city: 'trichy',
+    dateLabel: 'Tue, 20 Aug', dateLabelTa: 'செவ்வாய், 20 ஆவணி',
+    timeLabel: '6:00 AM – 8:00 PM', timeLabelTa: 'காலை 6:00 – இரவு 8:00',
+    description: 'Ten-day chariot festival with all-night pujas and special alankaram for the deity.',
+    descriptionTa: 'பத்து நாள் தேர் திருவிழா. இரவு முழுவதும் பூஜைகளும் சிறப்பு அலங்காரமும் நடைபெறும்.',
+    badgeLabel: 'Utsavam', badgeLabelTa: BADGE_TA.Utsavam,
+    imageUrl: U('photo-1674981324574-a0ebb0bef50d'),
+    gradientFrom: '#1A3E6B', gradientTo: '#0A2040',
+  },
+  {
+    id: 'panguni-uthiram-trichy',
+    title: 'Panguni Uthiram Celebration',
+    titleTa: 'பங்குனி உத்திரம் விழா',
+    templeShortName: 'Samayapuram Mariamman',
+    templeShortNameTa: 'சமயபுரம் மாரியம்மன்',
+    area: 'Samayapuram', areaTa: 'சமயபுரம்', city: 'trichy',
+    dateLabel: 'Wed, 21 Aug', dateLabelTa: 'புதன், 21 ஆவணி',
+    timeLabel: '5:00 AM – 12:00 PM', timeLabelTa: 'அதிகாலை 5:00 – நண்பகல் 12:00',
+    description: 'Millions of devotees gather for the grand festival of Goddess Mariamman. Fire-walking ritual included.',
+    descriptionTa: 'மாரியம்மனின் பிரம்மாண்டமான விழாவுக்கு லட்சக்கணக்கான பக்தர்கள் கூடுவர். தீமிதிப்பு நடைபெறும்.',
+    badgeLabel: 'Festival', badgeLabelTa: BADGE_TA.Festival,
+    imageUrl: U('photo-1778385924133-4f9987da2aa7'),
+    gradientFrom: '#7A1A60', gradientTo: '#4A0E3A',
+  },
+
+  // ── Madurai ────────────────────────────────────────────────────────────────
+  {
+    id: 'chithirai-festival-madurai',
+    title: 'Chithirai Thiruvizha',
+    titleTa: 'சித்திரை திருவிழா',
+    templeShortName: 'Meenakshi Amman Temple',
+    templeShortNameTa: 'மீனாட்சி அம்மன் கோயில்',
+    area: 'Madurai City', areaTa: 'மதுரை நகரம்', city: 'madurai',
+    dateLabel: 'Thu, 22 Aug', dateLabelTa: 'வியாழன், 22 ஆவணி',
+    timeLabel: 'All Day', timeLabelTa: 'நாள் முழுவதும்',
+    description: "Madurai's grandest festival celebrating the divine wedding of Meenakshi and Sundareswarar.",
+    descriptionTa: 'மீனாட்சி-சுந்தரேஸ்வரர் திருக்கல்யாணத்தை கொண்டாடும் மதுரையின் மாபெரும் திருவிழா.',
+    badgeLabel: 'Festival', badgeLabelTa: BADGE_TA.Festival,
+    imageUrl: U('photo-1768406091087-7fb0d03f6064'),
+    gradientFrom: '#A04010', gradientTo: '#6A2808',
+  },
+  {
+    id: 'avani-moola-madurai',
+    title: 'Avani Moola Utsavam',
+    titleTa: 'ஆவணி மூல உற்சவம்',
+    templeShortName: 'Meenakshi Amman Temple',
+    templeShortNameTa: 'மீனாட்சி அம்மன் கோயில்',
+    area: 'Madurai City', areaTa: 'மதுரை நகரம்', city: 'madurai',
+    dateLabel: 'Fri, 23 Aug', dateLabelTa: 'வெள்ளி, 23 ஆவணி',
+    timeLabel: '6:00 AM – 10:00 PM', timeLabelTa: 'காலை 6:00 – இரவு 10:00',
+    description: 'Sacred ten-day festival with chariot procession around the four Mada streets of the temple.',
+    descriptionTa: 'கோயிலின் நான்கு மாட வீதிகளில் தேர் ஊர்வலத்துடன் கூடிய பத்து நாள் புனித விழா.',
+    badgeLabel: 'Utsavam', badgeLabelTa: BADGE_TA.Utsavam,
+    imageUrl: U('photo-1762966160822-556deeff018d'),
+    gradientFrom: '#1A3E6B', gradientTo: '#0A2040',
+  },
+  {
+    id: 'vaikasi-visakam-madurai',
+    title: 'Vaikasi Visakam Pooja',
+    titleTa: 'வைகாசி விசாகம் பூஜை',
+    templeShortName: 'Thiruparankundram Temple',
+    templeShortNameTa: 'திருப்பரங்குன்றம் கோயில்',
+    area: 'Thiruparankundram', areaTa: 'திருப்பரங்குன்றம்', city: 'madurai',
+    dateLabel: 'Sat, 24 Aug', dateLabelTa: 'சனி, 24 ஆவணி',
+    timeLabel: '5:30 AM – 1:00 PM', timeLabelTa: 'அதிகாலை 5:30 – மதியம் 1:00',
+    description: "Murugan's birthday celebration with special abhishekam and kavadi offerings by devotees.",
+    descriptionTa: 'முருகப் பெருமான் அவதார நாள். சிறப்பு அபிஷேகமும் பக்தர்களின் காவடி வழிபாடும் நடைபெறும்.',
+    badgeLabel: 'Puja', badgeLabelTa: BADGE_TA.Puja,
+    imageUrl: U('photo-1638896228901-1555f5e74280'),
+    gradientFrom: '#7A1A60', gradientTo: '#4A0E3A',
+  },
+
+  // ── Coimbatore ─────────────────────────────────────────────────────────────
+  {
+    id: 'vinayagar-chaturthi-coimbatore',
+    title: 'Vinayagar Chaturthi Utsavam',
+    titleTa: 'வினாயகர் சதுர்த்தி உற்சவம்',
+    templeShortName: 'Eachanari Vinayagar Temple',
+    templeShortNameTa: 'ஈச்சனாரி வினாயகர் கோயில்',
+    area: 'Eachanari', areaTa: 'ஈச்சனாரி', city: 'coimbatore',
+    dateLabel: 'Sun, 25 Aug', dateLabelTa: 'ஞாயிறு, 25 ஆவணி',
+    timeLabel: '5:00 AM onwards', timeLabelTa: 'அதிகாலை 5:00 முதல்',
+    description: "Grand celebration of Lord Ganesha's birthday with 21 types of modak offerings and archana.",
+    descriptionTa: 'கணேசர் அவதார நாள். 21 வகை மோதகங்களும் அர்ச்சனையும் கொண்டு கொண்டாடப்படும்.',
+    badgeLabel: 'Festival', badgeLabelTa: BADGE_TA.Festival,
+    imageUrl: U('photo-1595165989697-6c57f7536758'),
+    gradientFrom: '#8B3208', gradientTo: '#5A1E05',
+  },
+  {
+    id: 'panguni-utsavam-coimbatore',
+    title: 'Panguni Utsavam',
+    titleTa: 'பங்குனி உற்சவம்',
+    templeShortName: 'Marudamalai Murugan Temple',
+    templeShortNameTa: 'மருதமலை முருகன் கோயில்',
+    area: 'Marudamalai', areaTa: 'மருதமலை', city: 'coimbatore',
+    dateLabel: 'Mon, 26 Aug', dateLabelTa: 'திங்கள், 26 ஆவணி',
+    timeLabel: '6:00 AM – 9:00 PM', timeLabelTa: 'காலை 6:00 – இரவு 9:00',
+    description: 'Hill temple festival with chariot procession and thousands of kavadi bearers climbing the hill.',
+    descriptionTa: 'மலைக்கோயில் திருவிழா. தேர் ஊர்வலமும் ஆயிரக்கணக்கான காவடி பக்தர்கள் மலையேறுவதும் நடைபெறும்.',
+    badgeLabel: 'Utsavam', badgeLabelTa: BADGE_TA.Utsavam,
+    imageUrl: U('photo-1778385924133-4f9987da2aa7'),
+    gradientFrom: '#904808', gradientTo: '#5A2C05',
+  },
+  {
+    id: 'aadi-festival-coimbatore',
+    title: 'Aadi Perukku Celebration',
+    titleTa: 'ஆடிப் பெருக்கு விழா',
+    templeShortName: 'Perur Pateeswarar Temple',
+    templeShortNameTa: 'பேரூர் பட்டீஸ்வரர் கோயில்',
+    area: 'Perur', areaTa: 'பேரூர்', city: 'coimbatore',
+    dateLabel: 'Tue, 27 Aug', dateLabelTa: 'செவ்வாய், 27 ஆவணி',
+    timeLabel: '7:00 AM – 12:00 PM', timeLabelTa: 'காலை 7:00 – நண்பகல் 12:00',
+    description: 'Celebration of the river rising, with offerings to Kaveri river and special homam at the temple.',
+    descriptionTa: 'நதி பெருகுவதை கொண்டாடும் விழா. காவேரி நதிக்கு படையலும் கோயிலில் சிறப்பு ஹோமமும் நடைபெறும்.',
+    badgeLabel: 'Puja', badgeLabelTa: BADGE_TA.Puja,
+    imageUrl: U('photo-1674981324574-a0ebb0bef50d'),
+    gradientFrom: '#1A3E6B', gradientTo: '#0A2040',
+  },
+
+  // ── Salem ──────────────────────────────────────────────────────────────────
+  {
+    id: 'durgashtami-salem',
+    title: 'Durgashtami Utsavam',
+    titleTa: 'துர்காஷ்டமி உற்சவம்',
+    templeShortName: 'Kottai Mariamman Temple',
+    templeShortNameTa: 'கோட்டை மாரியம்மன் கோயில்',
+    area: 'Salem City', areaTa: 'சேலம் நகரம்', city: 'salem',
+    dateLabel: 'Wed, 28 Aug', dateLabelTa: 'புதன், 28 ஆவணி',
+    timeLabel: '6:00 AM – 8:00 PM', timeLabelTa: 'காலை 6:00 – இரவு 8:00',
+    description: "Nine-night festival in honour of the Goddess with fire-walking and special neivedyam.",
+    descriptionTa: 'அம்பாளுக்கான ஒன்பது இரவு விழா. தீமிதிப்பும் சிறப்பு நைவேத்தியமும் நடைபெறும்.',
+    badgeLabel: 'Utsavam', badgeLabelTa: BADGE_TA.Utsavam,
+    imageUrl: U('photo-1762966160822-556deeff018d'),
+    gradientFrom: '#7A1A60', gradientTo: '#4A0E3A',
+  },
+  {
+    id: 'sugavaneswarar-abishekam',
+    title: 'Pradosham Abhishekam',
+    titleTa: 'பிரதோஷ அபிஷேகம்',
+    templeShortName: 'Sugavaneswarar Temple',
+    templeShortNameTa: 'சுகவனேஸ்வரர் கோயில்',
+    area: 'Salem City', areaTa: 'சேலம் நகரம்', city: 'salem',
+    dateLabel: 'Thu, 29 Aug', dateLabelTa: 'வியாழன், 29 ஆவணி',
+    timeLabel: '5:30 PM – 7:30 PM', timeLabelTa: 'மாலை 5:30 – 7:30',
+    description: 'Bi-monthly Pradosha puja with special rudrabhishekam and deepa aradhana for Lord Shiva.',
+    descriptionTa: 'சிவப் பெருமானுக்கான பிரதோஷ பூஜை. சிறப்பு ருத்ர அபிஷேகமும் தீப ஆராதனையும் நடைபெறும்.',
+    badgeLabel: 'Puja', badgeLabelTa: BADGE_TA.Puja,
+    imageUrl: U('photo-1768406091087-7fb0d03f6064'),
+    gradientFrom: '#8B1A1A', gradientTo: '#5A1010',
+  },
+  {
+    id: 'periasamy-festival-salem',
+    title: 'Aadi Karthigai Deepam',
+    titleTa: 'ஆடி கார்த்திகை தீபம்',
+    templeShortName: 'Periasamy Koil',
+    templeShortNameTa: 'பெரியசாமி கோயில்',
+    area: 'Shevapet', areaTa: 'சேவப்பேட்டை', city: 'salem',
+    dateLabel: 'Fri, 30 Aug', dateLabelTa: 'வெள்ளி, 30 ஆவணி',
+    timeLabel: '6:00 PM – 9:00 PM', timeLabelTa: 'மாலை 6:00 – இரவு 9:00',
+    description: 'Festival of lights with thousands of lamps lit around the temple tank at sunset.',
+    descriptionTa: 'கோயில் குளத்தைச் சுற்றி ஆயிரக்கணக்கான தீபங்கள் ஏற்றப்படும் தீபத் திருவிழா.',
+    badgeLabel: 'Festival', badgeLabelTa: BADGE_TA.Festival,
+    imageUrl: U('photo-1595165989697-6c57f7536758'),
+    gradientFrom: '#C8680A', gradientTo: '#8B3208',
+  },
+
+  // ── Tirunelveli ────────────────────────────────────────────────────────────
+  {
+    id: 'nellaiappar-brahmotsavam',
+    title: 'Nellaiappar Brahmotsavam',
+    titleTa: 'நெல்லையப்பர் பிரம்மோற்சவம்',
+    templeShortName: 'Nellaiappar Temple',
+    templeShortNameTa: 'நெல்லையப்பர் கோயில்',
+    area: 'Tirunelveli Town', areaTa: 'திருநெல்வேலி நகரம்', city: 'tirunelveli',
+    dateLabel: 'Sat, 31 Aug', dateLabelTa: 'சனி, 31 ஆவணி',
+    timeLabel: 'All Day', timeLabelTa: 'நாள் முழுவதும்',
+    description: 'Grand annual festival of Nellaiappar-Kanthimathi temple with ten days of chariot procession.',
+    descriptionTa: 'நெல்லையப்பர்-காந்திமதி கோயிலின் ஆண்டு விழா. பத்து நாள் தேர் ஊர்வலத்துடன் நடைபெறும்.',
+    badgeLabel: 'Festival', badgeLabelTa: BADGE_TA.Festival,
+    imageUrl: U('photo-1705723116788-d11fa6e3f415'),
+    gradientFrom: '#8B3208', gradientTo: '#5A1E05',
+  },
+  {
+    id: 'pothigai-panguni',
+    title: 'Panguni Uthiram Festival',
+    titleTa: 'பங்குனி உத்திரம் திருவிழா',
+    templeShortName: 'Pothigai Murugan Temple',
+    templeShortNameTa: 'பொதிகை முருகன் கோயில்',
+    area: 'Ambasamudram', areaTa: 'அம்பாசமுத்திரம்', city: 'tirunelveli',
+    dateLabel: 'Sun, 1 Sep', dateLabelTa: 'ஞாயிறு, 1 புரட்டாசி',
+    timeLabel: '5:00 AM – 12:00 PM', timeLabelTa: 'அதிகாலை 5:00 – நண்பகல் 12:00',
+    description: 'Murugan festival atop the Pothigai hills with kavadi bearers making the sacred climb.',
+    descriptionTa: 'பொதிகை மலைமீது நடைபெறும் முருகன் விழா. காவடி பக்தர்கள் புனித ஏற்றத்தை மேற்கொள்வர்.',
+    badgeLabel: 'Utsavam', badgeLabelTa: BADGE_TA.Utsavam,
+    imageUrl: U('photo-1778385924133-4f9987da2aa7'),
+    gradientFrom: '#904808', gradientTo: '#5A2C05',
+  },
+  {
+    id: 'agasthiar-jayanthi',
+    title: 'Agasthiar Jayanthi',
+    titleTa: 'அகஸ்தியர் ஜயந்தி',
+    templeShortName: 'Agasthiar Temple',
+    templeShortNameTa: 'அகஸ்தியர் கோயில்',
+    area: 'Kallidaikurichi', areaTa: 'கள்ளிடைக்குறிச்சி', city: 'tirunelveli',
+    dateLabel: 'Mon, 2 Sep', dateLabelTa: 'திங்கள், 2 புரட்டாசி',
+    timeLabel: '7:00 AM – 1:00 PM', timeLabelTa: 'காலை 7:00 – மதியம் 1:00',
+    description: "Birth anniversary of Sage Agasthiar with special pujas, discourses, and prasad distribution.",
+    descriptionTa: 'அகஸ்தியர் அவதார நாள். சிறப்பு பூஜைகள், சொற்பொழிவுகள், பிரசாத விநியோகம் நடைபெறும்.',
+    badgeLabel: 'Puja', badgeLabelTa: BADGE_TA.Puja,
+    imageUrl: U('photo-1671095149873-c982e19e4240'),
+    gradientFrom: '#1A3E6B', gradientTo: '#0A2040',
+  },
+];
+
+// ── Helper ────────────────────────────────────────────────────────────────────
+export function eventsByCity(cityId: string, limit = 3): TempleEvent[] {
+  return events.filter((e) => e.city === cityId).slice(0, limit);
+}
