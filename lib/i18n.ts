@@ -47,6 +47,37 @@ export const translations = {
       showAll:      'Show All Kudamuluku',
       demoNote:     'Demo entries — prototype content only',
     },
+    festivals: {
+      pageTitle:    'Festivals Across Tamil Nadu',
+      pageSubtitle: 'Explore temple festivals and celebrations. Follow the lunar calendar and plan your temple visits.',
+
+      seasonTabs: {
+        janMar:    'Jan – Mar',
+        aprJun:    'Apr – Jun',
+        julSep:    'Jul – Sep',
+        octDec:    'Oct – Dec',
+      },
+
+      filters: {
+        cities:       'Cities',
+        allTamilNadu: 'All Tamil Nadu',
+
+        lunarMonth:   'Lunar month',
+        anyMonth:     'Any month',
+
+        tithi:        'Tithi',
+        anyTithi:     'Any tithi',
+
+        deity:        'Primary deity',
+        searchDeity:  'Search deity...',
+      },
+
+      card: {
+        viewTemple:   'View Temple Details',
+        noResults:    'No festivals match your filters.',
+        noResultsHint: 'Try adjusting the city, month, or tithi.',
+      },
+    },
     renovDonate: {
       eyebrow:            'Renovation donation',
       sponsorTitle:       'Sponsor a work item',
@@ -409,6 +440,37 @@ export const translations = {
       sectionTitle: '{city} நகரில் வரவிருக்கும் குடமுழுக்கு',
       showAll:      'அனைத்து குடமுழுக்குகளும்',
       demoNote:     'மாதிரி பதிவுகள் — முன்மாதிரி உள்ளடக்கம் மட்டுமே',
+    },
+    festivals: {
+      pageTitle:    'தமிழ்நாடு முழுவதும் திருவிழாக்கள்',
+      pageSubtitle: 'கோயில் திருவிழாக்கள் மற்றும் கொண்டாட்டங்களை ஆராயுங்கள். சந்திர காலண்டரைப் பின்பற்றி உங்கள் கோயில் பயணங்களைத் திட்டமிடுங்கள்.',
+
+      seasonTabs: {
+        janMar:    'ஜன – மார்',
+        aprJun:    'ஏப் – ஜூன்',
+        julSep:    'ஜூலை – செப்',
+        octDec:    'அக் – டிச',
+      },
+
+      filters: {
+        cities:       'நகரங்கள்',
+        allTamilNadu: 'முழு தமிழ்நாடு',
+
+        lunarMonth:   'சந்திர மாதம்',
+        anyMonth:     'எந்த மாதமும்',
+
+        tithi:        'திதி',
+        anyTithi:     'எந்த திதியும்',
+
+        deity:        'முக்கிய தெய்வம்',
+        searchDeity:  'தெய்வத்தைத் தேடுக...',
+      },
+
+      card: {
+        viewTemple:   'கோயில் விவரங்களைக் காண',
+        noResults:    'உங்கள் வடிப்புக்கு பொருந்தக்கூடிய திருவிழாக்கள் எதுவும் இல்லை.',
+        noResultsHint: 'நகரம், மாதம் அல்லது திதியை சரிசெய்ய முயற்சிக்கவும்.',
+      },
     },
     renovDonate: {
       eyebrow:            'புதுப்பிப்பு நன்கொடை',
