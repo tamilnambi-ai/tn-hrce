@@ -114,7 +114,7 @@ function TempleDetailInner({ temple }: { temple: Temple }) {
 
           {/* Right sticky rail — desktop only */}
           <aside className="hidden lg:block w-[320px] flex-shrink-0">
-            <KeyHighlightsRail />
+            <KeyHighlightsRail templeName={temple.name} />
           </aside>
         </div>
       </div>

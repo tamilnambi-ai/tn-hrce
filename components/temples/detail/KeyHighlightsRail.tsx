@@ -10,10 +10,10 @@ import DonationCard from './DonationCard';
  * heading was removed so the donation card aligns to the top of the left
  * column.
  */
-export default function KeyHighlightsRail() {
+export default function KeyHighlightsRail({ templeName }: { templeName: string }) {
   return (
     <div className="sticky top-[144px]">
-      <DonationCard />
+      <DonationCard templeName={templeName} />
     </div>
   );
 }

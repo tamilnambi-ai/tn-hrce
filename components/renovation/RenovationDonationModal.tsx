@@ -18,13 +18,14 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { X, HandCoins, Sparkles, IndianRupee, Check, Landmark, Award, Gift, Ticket } from 'lucide-react';
+import { X, HandCoins, Sparkles, IndianRupee, Check, Landmark, Award, Gift, Ticket, Loader2, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { t } from '@/lib/i18n';
 import {
   workItemsFor, rewardsFor, formatInrShort, type Renovation, type WorkItem, type RewardKey,
 } from '@/data/renovations';
 import { cn } from '@/lib/utils';
+import { useRazorpay } from '@/hooks/useRazorpay';
 
 // ── Selection state ──────────────────────────────────────────────────────────
 type Selection =
@@ -49,14 +50,31 @@ export default function RenovationDonationModal({
   const taClass = ta ? 'ta-text' : '';
 
   const items = useMemo(() => (renovation ? workItemsFor(renovation.id) : []), [renovation]);
-  const [sel, setSel] = useState<Selection>({ kind: 'idle' });
+  const { openCheckout, paying } = useRazorpay();
+
+  const [sel,  setSel]  = useState<Selection>({ kind: 'idle' });
   const [done, setDone] = useState<{ ref: string; amount: number } | null>(null);
+
+  // Contact capture — shown before payment
+  const [showContact,  setShowContact]  = useState(false);
+  const [donorName,    setDonorName]    = useState('');
+  const [donorEmail,   setDonorEmail]   = useState('');
+  const [donorPhone,   setDonorPhone]   = useState('');
+  const [contactError, setContactError] = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   // Reset when modal closes / renovation changes
   useEffect(() => {
-    if (!open) { setSel({ kind: 'idle' }); setDone(null); }
+    if (!open) {
+      setSel({ kind: 'idle' }); setDone(null);
+      setShowContact(false); setDonorName(''); setDonorEmail(''); setDonorPhone('');
+      setContactError(null); setPaymentError(null);
+    }
   }, [open]);
-  useEffect(() => { setSel({ kind: 'idle' }); setDone(null); }, [renovation?.id]);
+  useEffect(() => {
+    setSel({ kind: 'idle' }); setDone(null);
+    setShowContact(false); setPaymentError(null);
+  }, [renovation?.id]);
 
   // Body-scroll lock + Esc
   useEffect(() => {
@@ -81,10 +99,63 @@ export default function RenovationDonationModal({
       ? items.find((i) => i.id === sel.itemId) ?? null
       : null;
 
+  // Step 1: CTA click → show contact form
   function handleDonate() {
     if (!canDonate) return;
-    const ref = 'RN-' + Math.random().toString(36).slice(2, 7).toUpperCase();
-    setDone({ ref, amount: activeAmount });
+    setShowContact(true);
+    setContactError(null);
+    setPaymentError(null);
+  }
+
+  // Step 2: Contact submitted → open Razorpay
+  async function handleContactSubmit() {
+    if (!donorName.trim()) {
+      setContactError(ta ? 'பெயர் கட்டாயம்' : 'Name is required');
+      return;
+    }
+    if (!donorEmail.includes('@')) {
+      setContactError(ta ? 'சரியான மின்னஞ்சல் தேவை' : 'Valid email is required');
+      return;
+    }
+    setContactError(null);
+    setShowContact(false);
+    if (!renovation) return;
+
+    const activeItem: WorkItem | null =
+      (sel.kind === 'item-full' || sel.kind === 'item-bulk')
+        ? items.find((i) => i.id === sel.itemId) ?? null
+        : null;
+
+    const purposeLabel = activeItem
+      ? `Renovation — Sponsoring: ${activeItem.name}`
+      : `Renovation — General contribution`;
+
+    const rewardsList = rewardsFor(activeAmount)
+      .map((r) => r.key === 'certificate'  ? 'Certificate + progress updates'
+                : r.key === 'darshanPass'  ? 'Special darshan pass'
+                : 'Named archana + inauguration invite')
+      .join(' · ');
+
+    const result = await openCheckout({
+      amount:      activeAmount,
+      description: `${renovation.templeName} — Renovation donation`,
+      prefill: { name: donorName, email: donorEmail, contact: donorPhone },
+      meta: {
+        type:        'donation',
+        email:       donorEmail,
+        donorName,
+        templeName:  renovation.templeName,
+        purpose:     purposeLabel,
+        amountValue: formatInrShort(activeAmount),
+        rewardsNote: rewardsList || undefined,
+      },
+    });
+
+    if (result.success && result.referenceId) {
+      setDone({ ref: result.referenceId, amount: activeAmount });
+    } else if (result.error && result.error !== 'cancelled') {
+      setPaymentError(ta ? 'பணம் செலுத்துவதில் பிழை. மீண்டும் முயற்சிக்கவும்.' : 'Payment failed. Please try again.');
+    }
   }
 
   return (
@@ -123,7 +194,7 @@ export default function RenovationDonationModal({
           </div>
         </div>
 
-        {/* Body — success view OR selection UI */}
+        {/* Body — success / contact / paying / selection */}
         {done ? (
           <RenovationReceipt
             renovation={renovation}
@@ -136,6 +207,57 @@ export default function RenovationDonationModal({
             ta={ta}
             onClose={onClose}
           />
+        ) : paying ? (
+          <div className="flex-1 flex flex-col items-center justify-center gap-3 p-8">
+            <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
+            <p className={cn('text-[13px] text-neutral-500', taClass)}>
+              {ta ? 'பணம் செலுத்துகிறது…' : 'Processing payment…'}
+            </p>
+          </div>
+        ) : showContact ? (
+          <div className="flex-1 flex flex-col px-5 py-5 gap-4">
+            <div>
+              <p className={cn('text-[13px] font-bold text-neutral-900 mb-1', taClass)}>
+                {ta ? 'தகவல் உள்ளிடவும்' : 'Your details'}
+              </p>
+              <p className={cn('text-[11px] text-neutral-500', taClass)}>
+                {ta ? 'உங்கள் ரசீது மின்னஞ்சலில் அனுப்பப்படும்.' : 'Your receipt will be sent to this email.'}
+              </p>
+            </div>
+            <div className="space-y-2.5">
+              <RenovContactField
+                label={ta ? 'பெயர்' : 'Full Name'} value={donorName}
+                onChange={setDonorName} placeholder="Rajan M." type="text" taClass={taClass}
+              />
+              <RenovContactField
+                label={ta ? 'மின்னஞ்சல்' : 'Email'} value={donorEmail}
+                onChange={setDonorEmail} placeholder="name@example.com" type="email" taClass={taClass}
+              />
+              <RenovContactField
+                label={ta ? 'தொலைபேசி' : 'Phone (optional)'} value={donorPhone}
+                onChange={setDonorPhone} placeholder="+91 98765 43210" type="tel" taClass={taClass}
+              />
+            </div>
+            {contactError && (
+              <p className="text-[12px] text-red-600 font-semibold">{contactError}</p>
+            )}
+            <button
+              onClick={handleContactSubmit}
+              className={cn(
+                'inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-white text-[14px] font-bold bg-emerald-600 hover:bg-emerald-700 transition-colors',
+                taClass
+              )}
+            >
+              {ta ? `${formatInrShort(activeAmount)} செலுத்து` : `Pay ${formatInrShort(activeAmount)}`}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setShowContact(false)}
+              className={cn('text-[12px] text-neutral-400 hover:underline self-start', taClass)}
+            >
+              {ta ? '← திரும்பு' : '← Back'}
+            </button>
+          </div>
         ) : (
           <>
             <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 space-y-5">
@@ -195,6 +317,13 @@ export default function RenovationDonationModal({
                 </div>
               </section>
             </div>
+
+            {/* Payment error */}
+            {paymentError && (
+              <div className="mx-5 mb-1 px-4 py-2.5 rounded-lg bg-red-50 border border-red-200">
+                <p className={cn('text-[12px] font-semibold text-red-700', taClass)}>{paymentError}</p>
+              </div>
+            )}
 
             {/* Sticky footer CTA */}
             <div className="border-t border-neutral-100 px-5 py-3 flex items-center gap-3 flex-shrink-0 bg-white">
@@ -562,6 +691,29 @@ function ReceiptRow({ icon, label, value, taClass }: { icon?: React.ReactNode; l
       {icon && <span className="text-neutral-400 flex-shrink-0">{icon}</span>}
       <p className={cn('text-[11px] text-neutral-500 uppercase font-semibold tracking-wide flex-shrink-0', taClass)}>{label}</p>
       <div className={cn('flex-1 min-w-0 text-right text-[13px] font-semibold text-neutral-900 truncate', taClass)}>{value}</div>
+    </div>
+  );
+}
+
+// ── Contact field for renovation modal ───────────────────────────────────────
+function RenovContactField({
+  label, value, onChange, placeholder, type, taClass,
+}: {
+  label: string; value: string; onChange: (v: string) => void;
+  placeholder: string; type: string; taClass: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 bg-white border border-neutral-200 rounded-xl focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-100 px-3 py-2.5 transition-all">
+      <label className={cn('text-[10px] font-bold uppercase tracking-wider text-neutral-400 w-[56px] flex-shrink-0', taClass)}>
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="flex-1 min-w-0 bg-transparent text-[13px] font-medium text-neutral-900 outline-none placeholder:text-neutral-400"
+      />
     </div>
   );
 }

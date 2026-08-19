@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { X, Info, TicketCheck } from 'lucide-react';
+import { X, Info, TicketCheck, Loader2 } from 'lucide-react';
+import { useRazorpay } from '@/hooks/useRazorpay';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { CITIES } from '@/contexts/CityContext';
 import { t } from '@/lib/i18n';
@@ -28,12 +29,14 @@ export default function BookPoojaModal({
   const ta = lang === 'ta';
   const taClass = ta ? 'ta-text' : '';
   const services = useMemo(() => poojaServicesForTemple(temple.id), [temple.id]);
+  const { openCheckout, paying } = useRazorpay();
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId,  setSelectedId]  = useState<string | null>(null);
+  const [reference,   setReference]   = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
   const selected: PoojaService | null =
     selectedId ? services.find((s) => s.id === selectedId) ?? null : null;
-
-  const [reference, setReference] = useState<string | null>(null);
 
   // Build the flow once per selected service
   const turns = useMemo(() => {
@@ -44,17 +47,74 @@ export default function BookPoojaModal({
       service: selected,
       lang,
       templeCity: cityName,
-      onFinish: (ref) => setReference(ref),
+      onRequestPayment: (amount) => {
+        // flow.answers is available via the flow object rendered below —
+        // we read it in handlePayment which is called once the turn resolves
+        void handlePayment(amount);
+      },
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, lang, temple.city, ta]);
 
   const flow = useChatFlow({ turns });
+
+  // Payment handler — reads answers collected by the chat flow
+  async function handlePayment(amount: number) {
+    setPaymentError(null);
+    const answers = flow.answers as {
+      devoteeName?: string;
+      contact?:     { mobile: string; email: string };
+      date?:        string;
+      slot?:        { id: string; timeLabel: string };
+      count?:       { adults: number; kids: number; amount: number };
+    };
+    const contact     = answers.contact;
+    const isGroup     = selected?.group === 'sannathi';
+    const passesCount = answers.count ? answers.count.adults + answers.count.kids : undefined;
+    const passesValue = passesCount !== undefined
+      ? `${passesCount} · ${answers.count?.adults} adults${answers.count?.kids ? ` · ${answers.count?.kids} kids` : ''}`
+      : undefined;
+    const dateStr = answers.date
+      ? new Date(answers.date).toLocaleDateString('en-IN', {
+          weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
+        })
+      : '—';
+
+    const result = await openCheckout({
+      amount,
+      description: `${isGroup ? 'Darshan' : 'Pooja'} — ${ta ? (temple.nameTa ?? temple.name) : temple.name}`,
+      prefill: {
+        name:    answers.devoteeName ?? '',
+        email:   contact?.email     ?? '',
+        contact: contact?.mobile    ?? '',
+      },
+      meta: {
+        type:        'booking',
+        email:       contact?.email ?? '',
+        isGroup:     isGroup ? 'true' : 'false',
+        templeName:  ta ? (temple.nameTa ?? temple.name) : temple.name,
+        poojaName:   selected ? (ta ? (selected.nameTa ?? selected.name) : selected.name) : '',
+        devoteeName: answers.devoteeName ?? '',
+        dateValue:   dateStr,
+        timeValue:   answers.slot?.timeLabel,
+        passesValue,
+        amountValue: formatInr(amount),
+      },
+    });
+
+    if (result.success && result.referenceId) {
+      setReference(result.referenceId);
+    } else if (result.error && result.error !== 'cancelled') {
+      setPaymentError(ta ? 'பணம் செலுத்துவதில் பிழை. மீண்டும் முயற்சிக்கவும்.' : 'Payment failed. Please try again.');
+    }
+  }
 
   // Reset when modal closes
   useEffect(() => {
     if (!open) {
       setSelectedId(null);
       setReference(null);
+      setPaymentError(null);
     }
   }, [open]);
 
@@ -185,22 +245,36 @@ export default function BookPoojaModal({
                 </div>
               );
             })()
+          ) : paying ? (
+            <div className="flex-1 flex flex-col items-center justify-center gap-3 p-8">
+              <Loader2 className="w-8 h-8 text-[--color-site-name] animate-spin" />
+              <p className={cn('text-[13px] text-[--color-text-secondary]', taClass)}>
+                {ta ? 'பணம் செலுத்துகிறது…' : 'Processing payment…'}
+              </p>
+            </div>
           ) : (
-            <ChatShell
-              header={<HeaderStrip taClass={taClass} templeName={templeName} />}
-              posted={flow.posted}
-              currentTurn={flow.currentTurn}
-              onSubmit={flow.advance}
-              onSkip={flow.skip}
-              totalTurns={turns.length}
-              currentIndex={flow.index}
-              isComplete={flow.isComplete}
-              bilingualClass={taClass}
-              progressLabel={t(lang, 'bookPooja.progress', {
-                n: Math.min(flow.index + 1, turns.length),
-                total: turns.length,
-              })}
-            />
+            <>
+              {paymentError && (
+                <div className="mx-4 mt-3 px-4 py-2.5 rounded-lg bg-red-50 border border-red-200">
+                  <p className={cn('text-[12px] font-semibold text-red-700', taClass)}>{paymentError}</p>
+                </div>
+              )}
+              <ChatShell
+                header={<HeaderStrip taClass={taClass} templeName={templeName} />}
+                posted={flow.posted}
+                currentTurn={flow.currentTurn}
+                onSubmit={flow.advance}
+                onSkip={flow.skip}
+                totalTurns={turns.length}
+                currentIndex={flow.index}
+                isComplete={flow.isComplete}
+                bilingualClass={taClass}
+                progressLabel={t(lang, 'bookPooja.progress', {
+                  n: Math.min(flow.index + 1, turns.length),
+                  total: turns.length,
+                })}
+              />
+            </>
           )}
         </div>
       </div>

@@ -14,7 +14,8 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { X, ChevronDown, Flame, HandHeart, TicketCheck, ChevronLeft, Landmark } from 'lucide-react';
+import { X, ChevronDown, Flame, HandHeart, TicketCheck, ChevronLeft, Landmark, Loader2 } from 'lucide-react';
+import { useRazorpay } from '@/hooks/useRazorpay';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useCity, CITIES } from '@/contexts/CityContext';
 import { t } from '@/lib/i18n';
@@ -37,10 +38,13 @@ export default function HomeBookingModal({ open, onClose }: { open: boolean; onC
   const cityName = ta ? city.nameTa : city.name;
 
   const templeList = useMemo(() => templesByCity(city.id, 50), [city.id]);
-  const [templeId, setTempleId] = useState<string | null>(null);
-  const [kind, setKind] = useState<BookKind | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [reference, setReference] = useState<string | null>(null);
+  const { openCheckout, paying } = useRazorpay();
+
+  const [templeId,     setTempleId]     = useState<string | null>(null);
+  const [kind,         setKind]         = useState<BookKind | null>(null);
+  const [selectedId,   setSelectedId]   = useState<string | null>(null);
+  const [reference,    setReference]    = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const temple: Temple | null =
     templeId ? templeList.find((tp) => tp.id === templeId) ?? null : null;
@@ -55,13 +59,13 @@ export default function HomeBookingModal({ open, onClose }: { open: boolean; onC
     selectedId ? services.find((s) => s.id === selectedId) ?? null : null;
 
   // Reset selection when temple/kind changes
-  useEffect(() => { setKind(null); setSelectedId(null); setReference(null); }, [templeId]);
-  useEffect(() => { setSelectedId(null); setReference(null); }, [kind]);
+  useEffect(() => { setKind(null); setSelectedId(null); setReference(null); setPaymentError(null); }, [templeId]);
+  useEffect(() => { setSelectedId(null); setReference(null); setPaymentError(null); }, [kind]);
 
   // Full reset when modal closes
   useEffect(() => {
     if (!open) {
-      setTempleId(null); setKind(null); setSelectedId(null); setReference(null);
+      setTempleId(null); setKind(null); setSelectedId(null); setReference(null); setPaymentError(null);
     }
   }, [open]);
 
@@ -85,10 +89,62 @@ export default function HomeBookingModal({ open, onClose }: { open: boolean; onC
     const cName = cityMeta ? (ta ? cityMeta.nameTa : cityMeta.name) : temple.city;
     return buildPoojaFlow({
       service: selected, lang, templeCity: cName,
-      onFinish: (ref) => setReference(ref),
+      onRequestPayment: (amount) => { void handlePayment(amount); },
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, lang, temple, ta]);
   const flow = useChatFlow({ turns });
+
+  // Payment handler
+  async function handlePayment(amount: number) {
+    if (!selected || !temple) return;
+    setPaymentError(null);
+    const answers = flow.answers as {
+      devoteeName?: string;
+      contact?:     { mobile: string; email: string };
+      date?:        string;
+      slot?:        { id: string; timeLabel: string };
+      count?:       { adults: number; kids: number; amount: number };
+    };
+    const contact  = answers.contact;
+    const isGroup  = selected.group === 'sannathi';
+    const dateStr  = answers.date
+      ? new Date(answers.date).toLocaleDateString('en-IN', {
+          weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
+        })
+      : '—';
+    const passesValue = answers.count
+      ? `${answers.count.adults + answers.count.kids} · ${answers.count.adults} adults${answers.count.kids ? ` · ${answers.count.kids} kids` : ''}`
+      : undefined;
+
+    const result = await openCheckout({
+      amount,
+      description: `${isGroup ? 'Darshan' : 'Pooja'} — ${ta ? (temple.nameTa ?? temple.name) : temple.name}`,
+      prefill: {
+        name:    answers.devoteeName ?? '',
+        email:   contact?.email     ?? '',
+        contact: contact?.mobile    ?? '',
+      },
+      meta: {
+        type:        'booking',
+        email:       contact?.email ?? '',
+        isGroup:     isGroup ? 'true' : 'false',
+        templeName:  ta ? (temple.nameTa ?? temple.name) : temple.name,
+        poojaName:   ta ? (selected.nameTa ?? selected.name) : selected.name,
+        devoteeName: answers.devoteeName ?? '',
+        dateValue:   dateStr,
+        timeValue:   answers.slot?.timeLabel,
+        passesValue,
+        amountValue: formatInr(amount),
+      },
+    });
+
+    if (result.success && result.referenceId) {
+      setReference(result.referenceId);
+    } else if (result.error && result.error !== 'cancelled') {
+      setPaymentError(ta ? 'பணம் செலுத்துவதில் பிழை. மீண்டும் முயற்சிக்கவும்.' : 'Payment failed. Please try again.');
+    }
+  }
 
   if (!open) return null;
 
@@ -129,6 +185,13 @@ export default function HomeBookingModal({ open, onClose }: { open: boolean; onC
               flow={flow} lang={lang} ta={ta} temple={temple} templeName={templeName}
               selected={selected} reference={reference!} onClose={onClose}
             />
+          ) : paying ? (
+            <div className="flex-1 flex flex-col items-center justify-center gap-3 p-8">
+              <Loader2 className="w-8 h-8 text-[--color-site-name] animate-spin" />
+              <p className={cn('text-[13px] text-[--color-text-secondary]', taClass)}>
+                {ta ? 'பணம் செலுத்துகிறது…' : 'Processing payment…'}
+              </p>
+            </div>
           ) : chatActive && temple && selected ? (
             <>
               <ContextStrip
@@ -139,6 +202,11 @@ export default function HomeBookingModal({ open, onClose }: { open: boolean; onC
                 changeLabel={t(lang, 'homeBook.changeSelection')}
                 taClass={taClass}
               />
+              {paymentError && (
+                <div className="mx-4 mt-3 px-4 py-2.5 rounded-lg bg-red-50 border border-red-200">
+                  <p className={cn('text-[12px] font-semibold text-red-700', taClass)}>{paymentError}</p>
+                </div>
+              )}
               <div className="flex-1 min-h-0">
                 <ChatShell
                   posted={flow.posted}

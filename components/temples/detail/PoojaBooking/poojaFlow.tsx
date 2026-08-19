@@ -51,12 +51,13 @@ export function buildPoojaFlow({
   service,
   lang,
   templeCity,
-  onFinish,
+  onRequestPayment,
 }: {
   service: PoojaService;
   lang: Language;
-  templeCity: string;   // e.g. "Chennai"
-  onFinish: (referenceId: string) => void;
+  templeCity: string;              // e.g. "Chennai"
+  /** Called when the user confirms — parent handles Razorpay + gets real ref */
+  onRequestPayment: (amount: number) => void;
 }): ChatTurn[] {
   const ta = lang === 'ta';
   const taClass = ta ? 'ta-text' : '';
@@ -298,9 +299,8 @@ export function buildPoojaFlow({
               />
             )}
             onConfirm={() => {
-              const ref = generateRef();
-              onSubmit({ confirmed: true, ref }, ta ? '— உறுதி செய்யப்பட்டது —' : '— confirmed —');
-              onFinish(ref);
+              onSubmit({ confirmed: true }, ta ? '— உறுதி செய்யப்பட்டது —' : '— confirmed —');
+              onRequestPayment(finalAmount);
             }}
           />
         );
@@ -463,7 +463,4 @@ function buildSummaryRows({
   return rows;
 }
 
-function generateRef() {
-  const now = Date.now().toString(36).toUpperCase();
-  return 'HRCE-' + now.slice(-8);
-}
+// (Reference is now generated server-side after real payment verification)

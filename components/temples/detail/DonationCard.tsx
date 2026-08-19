@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { HandCoins, Sparkles, ArrowRight, IndianRupee } from 'lucide-react';
+import { HandCoins, Sparkles, ArrowRight, IndianRupee, Loader2, Check, X } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { t } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
+import { useRazorpay } from '@/hooks/useRazorpay';
 
 type Frequency = 'oneTime' | 'monthly' | 'yearly';
 type PresetKey  = '101' | '201' | '501' | '1001' | 'other';
@@ -26,14 +27,33 @@ const PRESETS: Preset[] = [
 // Format numbers as Indian rupees with commas
 const inr = (n: number) => '₹' + n.toLocaleString('en-IN');
 
-export default function DonationCard({ compact = false }: { compact?: boolean } = {}) {
+export default function DonationCard({
+  compact    = false,
+  templeName = 'Tamil Nadu Temple',
+}: {
+  compact?:    boolean;
+  /** Pass the temple name so it appears in confirmation emails */
+  templeName?: string;
+} = {}) {
   const { lang } = useLanguage();
   const ta = lang === 'ta';
   const taClass = ta ? 'ta-text' : '';
+  const { openCheckout, paying } = useRazorpay();
 
-  const [freq,     setFreq]     = useState<Frequency>('oneTime');
-  const [selected, setSelected] = useState<PresetKey>('501');
+  const [freq,        setFreq]        = useState<Frequency>('oneTime');
+  const [selected,    setSelected]    = useState<PresetKey>('501');
   const [customAmount, setCustomAmount] = useState<string>('');
+
+  // Contact capture step
+  const [showContact,  setShowContact]  = useState(false);
+  const [donorName,    setDonorName]    = useState('');
+  const [donorEmail,   setDonorEmail]   = useState('');
+  const [donorPhone,   setDonorPhone]   = useState('');
+  const [contactError, setContactError] = useState<string | null>(null);
+
+  // Post-payment success
+  const [successRef,   setSuccessRef]   = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const activeAmount =
     selected === 'other'
@@ -51,6 +71,170 @@ export default function DonationCard({ compact = false }: { compact?: boolean } 
     ? t(lang, ctaKey, { amount: inr(activeAmount) })
     : t(lang, 'templeDetail.donateCard.selectAmount');
 
+  function handleCtaClick() {
+    if (!canDonate) return;
+    setShowContact(true);
+    setContactError(null);
+  }
+
+  async function handleContactSubmit() {
+    if (!donorName.trim()) {
+      setContactError(ta ? 'பெயர் கட்டாயம்' : 'Name is required');
+      return;
+    }
+    if (!donorEmail.includes('@')) {
+      setContactError(ta ? 'சரியான மின்னஞ்சல் தேவை' : 'Valid email is required');
+      return;
+    }
+    setContactError(null);
+    setShowContact(false);
+
+    setPaymentError(null);
+    const purposeLabel = PRESETS.find((p) => p.key === selected)?.purposeKey ?? 'donation';
+    const freqLabel    = freq === 'oneTime' ? 'One-time' : freq === 'monthly' ? 'Monthly' : 'Yearly';
+
+    const result = await openCheckout({
+      amount:      activeAmount,
+      description: `${freqLabel} donation — ${templeName}`,
+      prefill: {
+        name:    donorName,
+        email:   donorEmail,
+        contact: donorPhone,
+      },
+      meta: {
+        type:        'donation',
+        email:       donorEmail,
+        donorName,
+        templeName,
+        purpose:     `${freqLabel} — ${t(lang, `templeDetail.donateCard.purpose.${purposeLabel}`)}`,
+        amountValue: inr(activeAmount),
+      },
+    });
+
+    if (result.success && result.referenceId) {
+      setSuccessRef(result.referenceId);
+    } else if (result.error && result.error !== 'cancelled') {
+      setPaymentError(ta ? 'பணம் செலுத்துவதில் பிழை. மீண்டும் முயற்சிக்கவும்.' : 'Payment failed. Please try again.');
+    }
+  }
+
+  // ── Success view ────────────────────────────────────────────────────────────
+  if (successRef) {
+    return (
+      <div className={cn(
+        'rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 shadow-sm',
+        compact ? 'p-3' : 'p-4'
+      )}>
+        <div className="flex flex-col items-center gap-3 py-3 text-center">
+          <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center">
+            <Check className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <p className={cn('text-[14px] font-bold text-neutral-900', taClass)}>
+              {ta ? 'நன்கொடை வெற்றிகரமாக வழங்கப்பட்டது!' : 'Donation successful!'}
+            </p>
+            <p className={cn('text-[12px] text-neutral-500 mt-1', taClass)}>
+              {ta ? 'உங்கள் மின்னஞ்சலுக்கு ரசீது அனுப்பப்பட்டது.' : 'Receipt sent to your email.'}
+            </p>
+          </div>
+          <p className="font-mono text-[11px] text-neutral-400 bg-neutral-100 rounded-lg px-3 py-1.5">
+            {successRef}
+          </p>
+          <button
+            onClick={() => {
+              setSuccessRef(null);
+              setDonorName('');
+              setDonorEmail('');
+              setDonorPhone('');
+              setSelected('501');
+              setCustomAmount('');
+            }}
+            className={cn('text-[12px] text-emerald-700 font-semibold hover:underline', taClass)}
+          >
+            {ta ? 'மீண்டும் நன்கொடை அளிக்க' : 'Donate again'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Contact form overlay ────────────────────────────────────────────────────
+  if (showContact) {
+    return (
+      <div className={cn(
+        'rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 shadow-sm',
+        compact ? 'p-3' : 'p-4'
+      )}>
+        <div className="flex items-center justify-between mb-3">
+          <p className={cn('text-[13px] font-bold text-neutral-900', taClass)}>
+            {ta ? 'தகவல் உள்ளிடவும்' : 'Your details'}
+          </p>
+          <button
+            onClick={() => setShowContact(false)}
+            className="w-6 h-6 flex items-center justify-center rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-500"
+          >
+            <X className="w-3 h-3" />
+          </button>
+        </div>
+        <div className="space-y-2">
+          <ContactField
+            label={ta ? 'பெயர்' : 'Full Name'}
+            value={donorName}
+            onChange={setDonorName}
+            placeholder="Rajan M."
+            type="text"
+            taClass={taClass}
+          />
+          <ContactField
+            label={ta ? 'மின்னஞ்சல்' : 'Email'}
+            value={donorEmail}
+            onChange={setDonorEmail}
+            placeholder="name@example.com"
+            type="email"
+            taClass={taClass}
+          />
+          <ContactField
+            label={ta ? 'தொலைபேசி' : 'Phone'}
+            value={donorPhone}
+            onChange={setDonorPhone}
+            placeholder="+91 98765 43210"
+            type="tel"
+            taClass={taClass}
+          />
+        </div>
+        {contactError && (
+          <p className="mt-2 text-[12px] text-red-600 font-semibold">{contactError}</p>
+        )}
+        <button
+          onClick={handleContactSubmit}
+          className={cn(
+            'w-full mt-3 py-2.5 rounded-xl text-[13px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors flex items-center justify-center gap-1.5',
+            taClass
+          )}
+        >
+          {ta ? `${inr(activeAmount)} செலுத்து` : `Pay ${inr(activeAmount)}`}
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    );
+  }
+
+  // ── Paying spinner ──────────────────────────────────────────────────────────
+  if (paying) {
+    return (
+      <div className={cn(
+        'rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 shadow-sm flex items-center justify-center gap-3',
+        compact ? 'p-6' : 'p-8'
+      )}>
+        <Loader2 className="w-5 h-5 text-emerald-600 animate-spin" />
+        <p className={cn('text-[13px] text-neutral-500', taClass)}>
+          {ta ? 'பணம் செலுத்துகிறது…' : 'Processing payment…'}
+        </p>
+      </div>
+    );
+  }
+
+  // ── Main card ───────────────────────────────────────────────────────────────
   return (
     <div className={cn(
       'rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 shadow-sm',
@@ -163,8 +347,13 @@ export default function DonationCard({ compact = false }: { compact?: boolean } 
         })}
       </div>
 
+      {paymentError && (
+        <p className="mt-2 text-[12px] text-red-600 font-semibold">{paymentError}</p>
+      )}
+
       {/* CTA */}
       <button
+        onClick={handleCtaClick}
         disabled={!canDonate}
         className={cn(
           'w-full flex items-center justify-center gap-1.5 rounded-xl text-[13px] font-bold text-white transition-all',
@@ -178,6 +367,29 @@ export default function DonationCard({ compact = false }: { compact?: boolean } 
         {ctaLabel}
         {canDonate && <ArrowRight className="w-3.5 h-3.5" />}
       </button>
+    </div>
+  );
+}
+
+// ── Shared contact field ──────────────────────────────────────────────────────
+function ContactField({
+  label, value, onChange, placeholder, type, taClass,
+}: {
+  label: string; value: string; onChange: (v: string) => void;
+  placeholder: string; type: string; taClass: string;
+}) {
+  return (
+    <div className="flex items-center gap-2 bg-white border border-neutral-200 rounded-xl focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-100 px-3 py-2 transition-all">
+      <label className={cn('text-[10px] font-bold uppercase tracking-wider text-neutral-400 w-[52px] flex-shrink-0', taClass)}>
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="flex-1 min-w-0 bg-transparent text-[13px] font-medium text-neutral-900 outline-none placeholder:text-neutral-400"
+      />
     </div>
   );
 }

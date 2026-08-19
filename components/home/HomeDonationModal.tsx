@@ -115,7 +115,7 @@ export default function HomeDonationModal({ open, onClose }: { open: boolean; on
 
           {/* Donation card OR empty state */}
           {temple ? (
-            <DonationCard compact />
+            <DonationCard compact templeName={templeName} />
           ) : (
             <div className={cn('rounded-xl border border-dashed border-neutral-200 bg-neutral-50 p-6 text-center', taClass)}>
               <p className="text-[12px] text-neutral-500">

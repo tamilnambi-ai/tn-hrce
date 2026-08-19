@@ -49,6 +49,17 @@ export default function BookingTicket({
   closeLabel: string;
 }) {
   const [toast, setToast] = useState<string | null>(null);
+
+  function handlePrint() {
+    window.print();
+  }
+
+  function handleDownload() {
+    // Use browser's built-in print-to-PDF. Show a brief hint toast first.
+    setToast(toastMessage);
+    setTimeout(() => { setToast(null); window.print(); }, 400);
+  }
+
   function fireToast() {
     setToast(toastMessage);
     setTimeout(() => setToast(null), 3000);
@@ -185,9 +196,9 @@ export default function BookingTicket({
 
       {/* Actions — outside the ticket, hidden when printing */}
       <div className="mt-4 grid grid-cols-3 gap-2 print:hidden">
-        <ActionButton icon={Printer}  label={actions.print}    onClick={fireToast} bilingualClass={taClass} />
-        <ActionButton icon={Download} label={actions.download} onClick={fireToast} bilingualClass={taClass} />
-        <ActionButton icon={Share2}   label={actions.share}    onClick={fireToast} bilingualClass={taClass} />
+        <ActionButton icon={Printer}  label={actions.print}    onClick={handlePrint}    bilingualClass={taClass} />
+        <ActionButton icon={Download} label={actions.download} onClick={handleDownload} bilingualClass={taClass} />
+        <ActionButton icon={Share2}   label={actions.share}    onClick={fireToast}      bilingualClass={taClass} />
       </div>
 
       {/* Close */}
