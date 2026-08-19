@@ -417,6 +417,8 @@ function buildSummaryRows({
     contact?: { mobile: string; email: string };
     proof?: { type: string; number: string };
     address?: { door: string; village: string; pin: string };
+    slot?: { id: string; timeLabel: string };
+    count?: { adults: number; kids: number; amount: number };
   };
   ta: boolean;
 }) {

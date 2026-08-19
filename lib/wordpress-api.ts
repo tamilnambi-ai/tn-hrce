@@ -121,6 +121,7 @@ export async function fetchEvents(limit = 3): Promise<TempleEvent[]> {
       title:            p.title.rendered,
       templeShortName:  p.acf?.hrce_event_temple      ?? '',
       area:             p.acf?.hrce_event_area         ?? '',
+      city:             (p.acf as { hrce_event_city?: string })?.hrce_event_city ?? 'chennai',
       dateLabel:        p.acf?.hrce_event_date_label   ?? '',
       timeLabel:        p.acf?.hrce_event_time_label   ?? '',
       description:      p.acf?.hrce_event_description  ?? '',
@@ -143,6 +144,7 @@ export async function fetchPackages(limit = 3): Promise<TourPackage[]> {
     return posts.map((p, i) => ({
       id:           p.slug,
       name:         p.title.rendered,
+      city:         (p.acf as { hrce_pkg_city?: string })?.hrce_pkg_city ?? 'chennai',
       duration:     p.acf?.hrce_pkg_duration     ?? '',
       templeCount:  Number(p.acf?.hrce_pkg_temple_count ?? 0),
       priceLabel:   p.acf?.hrce_pkg_price_label  ?? '',
