@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { t } from '@/lib/i18n';
 import { FESTIVALS, type TamilMonth, type Tithi } from '@/data/festivals';
@@ -25,6 +26,8 @@ export default function FestivalsPage() {
   const taClass = ta ? 'ta-text' : '';
 
   // State
+  const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState<Season>('jan-mar');
   const [selectedCity, setSelectedCity] = useState('all');
   const [selectedTamilMonth, setSelectedTamilMonth] = useState<TamilMonth | null>(null);
@@ -38,6 +41,12 @@ export default function FestivalsPage() {
     // City filter
     if (selectedCity !== 'all') {
       result = result.filter((f) => f.city === selectedCity);
+    }
+
+    // Season filter (if no specific lunar month is selected)
+    if (!selectedTamilMonth) {
+      const seasonMonths = SEASON_MONTHS[selectedSeason];
+      result = result.filter((f) => seasonMonths.includes(f.tamilMonth));
     }
 
     // Tamil month filter (overrides season selection)
@@ -57,7 +66,7 @@ export default function FestivalsPage() {
 
     // Sort by date
     return result.sort((a, b) => new Date(a.dateFrom).getTime() - new Date(b.dateFrom).getTime());
-  }, [selectedCity, selectedTamilMonth, selectedTithi, selectedDeity]);
+  }, [selectedCity, selectedSeason, selectedTamilMonth, selectedTithi, selectedDeity]);
 
   // Season tabs
   const seasonTabs: Array<{ value: Season; label: string }> = [
@@ -69,33 +78,67 @@ export default function FestivalsPage() {
 
   return (
     <div className={taClass}>
-      {/* Page header */}
+      {/* Page header with season tabs on the right */}
       <div className="container-page pt-8 pb-8">
-        <h1 className={cn('text-[28px] md:text-[32px] font-bold text-neutral-900 mb-2', taClass)}>
-          {t(lang, 'festivals.pageTitle')}
-        </h1>
-        <p className={cn('text-[15px] text-neutral-600 max-w-[600px] leading-relaxed', taClass)}>
-          {t(lang, 'festivals.pageSubtitle')}
-        </p>
-      </div>
+        <div className="flex items-start justify-between gap-8 mb-4">
+          <div className="flex-1">
+            <h1 className={cn('text-[28px] md:text-[32px] font-bold text-neutral-900 mb-2', taClass)}>
+              {t(lang, 'festivals.pageTitle')}
+            </h1>
+            <p className={cn('text-[15px] text-neutral-600 max-w-[600px] leading-relaxed', taClass)}>
+              {t(lang, 'festivals.pageSubtitle')}
+            </p>
+          </div>
 
-      {/* Season tabs */}
-      <div className="sticky top-[72px] z-30 bg-white/95 backdrop-blur-sm border-b border-neutral-200 shadow-sm">
-        <div className="container-page py-3">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-            <span className={cn('text-[11px] font-bold text-neutral-500 uppercase tracking-wider flex-shrink-0', taClass)}>
-              2026
-            </span>
-            <div className="flex items-center gap-1.5">
+          {/* Year and Season tabs - Right aligned */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Year Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
+                className={cn('flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors text-[13px] font-semibold',
+                  yearDropdownOpen
+                    ? 'bg-red-700 text-white'
+                    : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-700',
+                  taClass
+                )}>
+                {selectedYear}
+                <ChevronDown className={cn('w-3.5 h-3.5 transition-transform', yearDropdownOpen && 'rotate-180')} />
+              </button>
+              {yearDropdownOpen && (
+                <div className="absolute top-full right-0 mt-1 w-32 bg-white rounded-lg border border-neutral-200 shadow-lg overflow-hidden z-50">
+                  {[2026, 2027, 2028].map((year) => (
+                    <button
+                      key={year}
+                      onClick={() => {
+                        setSelectedYear(year);
+                        setYearDropdownOpen(false);
+                      }}
+                      className={cn(
+                        'w-full px-4 py-2 text-left text-[13px] font-medium transition-colors',
+                        selectedYear === year
+                          ? 'bg-amber-50 text-amber-900'
+                          : 'text-neutral-700 hover:bg-neutral-50'
+                      )}
+                    >
+                      {year}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Season tabs */}
+            <div className="flex items-center gap-2.5">
               {seasonTabs.map((season) => (
                 <button
                   key={season.value}
                   onClick={() => setSelectedSeason(season.value)}
                   className={cn(
-                    'px-3 py-1.5 rounded-full text-[13px] font-semibold transition-all whitespace-nowrap flex-shrink-0',
+                    'px-6 py-3 rounded-xl text-[15px] font-bold transition-all whitespace-nowrap border-2',
                     selectedSeason === season.value
-                      ? 'bg-amber-400 text-amber-900'
-                      : 'bg-neutral-200 text-neutral-700 hover:bg-neutral-300',
+                      ? 'bg-red-700 text-white border-red-800'
+                      : 'bg-neutral-200 text-neutral-700 border-neutral-300 hover:bg-neutral-300',
                     taClass
                   )}
                 >

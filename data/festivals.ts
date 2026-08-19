@@ -98,8 +98,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-08-14',
     tamilMonth: 'aadi',
     tithi: 'pournami',
-    tithiName: 'Aadi Pournami',
-    tithiNameTa: 'ஆடி பௌர்ணமி',
+    tithiName: 'Aadi Velli',
+    tithiNameTa: 'ஆடி வெள்ளி',
     description:
       'Aadi Pournami celebrates the full moon in the month of Aadi. Thousands of devotees gather for special abhishekam and darshan. This festival marks the transit of the Sun into the Leo zodiac.',
     descriptionTa:
@@ -117,8 +117,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-04-29',
     tamilMonth: 'chithirai',
     tithi: 'other',
-    tithiName: 'Chithirai Festival',
-    tithiNameTa: 'சித்திரை திருவிழா',
+    tithiName: 'Brahmotsavam',
+    tithiNameTa: 'பிரह்மோத்സவம்',
     description:
       'The grand Chithirai Festival celebrates the celestial wedding of Meenakshi and Shiva. The temple city comes alive with processions, cultural programs, and thousands of devotees from across the world.',
     descriptionTa:
@@ -136,8 +136,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-05-30',
     tamilMonth: 'vaigasi',
     tithi: 'other',
-    tithiName: 'Vaigasi Festival',
-    tithiNameTa: 'வைகாசி திருவிழா',
+    tithiName: 'Prathosam',
+    tithiNameTa: 'ப्रதோषम்',
     description:
       'Vaigasi Festival celebrates Krishna in the summer month. Special rituals, flower decorations, and continuous devotional singing mark this celebration.',
     descriptionTa:
@@ -155,8 +155,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-01-03',
     tamilMonth: 'margazhi',
     tithi: 'amavasya',
-    tithiName: 'Margazhi Amavasya',
-    tithiNameTa: 'மார்கழி அமாவாசை',
+    tithiName: 'Kiruthigai',
+    tithiNameTa: 'கிருத்திகை',
     description:
       'Margazhi Amavasya (New Moon) in the winter month brings special significance. Devotees perform offerings and seek blessings for the coming year.',
     descriptionTa:
@@ -174,8 +174,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-02-08',
     tamilMonth: 'thai',
     tithi: 'other',
-    tithiName: 'Thai Pusam',
-    tithiNameTa: 'தை புஷ்ய நக்ஷத்திரம்',
+    tithiName: 'Krishnajeyanthi',
+    tithiNameTa: 'கிருஷ்ணஜெயந்தி',
     description:
       'Thai Pusam festival celebrates Muruga in the Thai month. Devotees light oil lamps and perform special pujas. The temple is beautifully decorated with flowers.',
     descriptionTa:
@@ -193,8 +193,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-03-01',
     tamilMonth: 'masi',
     tithi: 'pournami',
-    tithiName: 'Masi Pournami',
-    tithiNameTa: 'மாசி பௌர்ணமி',
+    tithiName: 'Vinayagar Chathurthi',
+    tithiNameTa: 'விநாயகர் சதுர்த்தி',
     description:
       'Masi Pournami marks the full moon in Masi month. The sacred mountain Arunachala is circumambulated by thousands of devotees in this auspicious ritual.',
     descriptionTa:
@@ -212,8 +212,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-02-08',
     tamilMonth: 'thai',
     tithi: 'other',
-    tithiName: 'Thai Pusam',
-    tithiNameTa: 'தை புஷ்ய நக்ஷத்திரம்',
+    tithiName: 'Krishnajeyanthi',
+    tithiNameTa: 'கிருஷ்ணஜெயந்தி',
     description:
       'Thai Pusam festival at Chidambaram celebrates the cosmic dance (Natya) of Shiva. The sanctum sanctorum glows with golden light and incense fills the air.',
     descriptionTa:
@@ -231,8 +231,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-01-16',
     tamilMonth: 'thai',
     tithi: 'other',
-    tithiName: 'Thai Pongal',
-    tithiNameTa: 'தை பொங்கல்',
+    tithiName: 'Aadi Velli',
+    tithiNameTa: 'ஆடி வெள்ளி',
     description:
       'Thai Pongal at the southernmost temple celebrates the harvest season. Pilgrim gatherings at the confluence of three oceans create a spiritual atmosphere.',
     descriptionTa:
@@ -269,8 +269,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-03-27',
     tamilMonth: 'panguni',
     tithi: 'other',
-    tithiName: 'Panguni Festival',
-    tithiNameTa: 'பங்குனி திருவிழா',
+    tithiName: 'Puraasi Saturday',
+    tithiNameTa: 'பூராட்டி சனிக்கிழமை',
     description:
       'Panguni Festival in spring celebrates renewal and fertility. Devotees offer special prayers and partake in temple-distributed prasadam.',
     descriptionTa:
@@ -288,8 +288,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-09-20',
     tamilMonth: 'purattasi',
     tithi: 'other',
-    tithiName: 'Purattasi Festival',
-    tithiNameTa: 'புரட்டாசி திருவிழா',
+    tithiName: 'Pavithra Urchavam',
+    tithiNameTa: 'பవித்র உற்சவம்',
     description:
       'Purattasi Festival celebrates Ranganatha with elaborate processions and special abhishekams. The temple tanks are filled and deity is taken in ceremonial processions.',
     descriptionTa:
@@ -345,8 +345,8 @@ export const FESTIVALS: Festival[] = [
     dateTo: '2026-06-12',
     tamilMonth: 'vaigasi',
     tithi: 'other',
-    tithiName: 'Vaigasi Festival',
-    tithiNameTa: 'வைகாசி திருவிழா',
+    tithiName: 'Prathosam',
+    tithiNameTa: 'ப्रதோषम்',
     description:
       'Vaigasi Festival celebrates Varadharaja (the wish-granting deity) with special offerings and the famous flower festival decorations.',
     descriptionTa:
@@ -365,7 +365,7 @@ export const FESTIVALS: Festival[] = [
     tamilMonth: 'aavani',
     tithi: 'other',
     tithiName: 'Aavani Festival',
-    tithiNameTa: 'ஆவணி திருவிழா',
+    tithiNameTa: 'ஆவணி விழா',
     description:
       'Aavani Festival celebrates Lord Muruga with hill processions and special Kavadi worship. Devotees perform sacred rituals honoring the youthful deity.',
     descriptionTa:

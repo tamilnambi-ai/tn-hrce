@@ -162,7 +162,7 @@ function HeaderInner() {
     { key: 'nav.home',      href: '/',                             Icon: Home,          match: () => pathname === '/' },
     { key: 'nav.temples',   href: '/temples',                       Icon: Landmark,      match: () => pathname === '/temples' || (pathname === '/placeholder' && searchParams.get('page') === 'temples') },
     { key: 'nav.kudamuluku', href: '/placeholder?page=kudamuluku', Icon: Droplets,      match: () => pathname === '/placeholder' && searchParams.get('page') === 'kudamuluku' },
-    { key: 'nav.festivals',  href: '/placeholder?page=festivals',  Icon: Sparkles,      match: () => pathname === '/placeholder' && searchParams.get('page') === 'festivals' },
+    { key: 'nav.festivals',  href: '/temples/festivals',            Icon: Sparkles,      match: () => pathname === '/temples/festivals' },
   ];
 
   return (

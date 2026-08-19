@@ -69,59 +69,6 @@ export default function FestivalsFilters({
         </div>
       </div>
 
-      {/* Lunar month */}
-      <div>
-        <label className={filterLabel}>
-          {t(lang, 'festivals.filters.lunarMonth')}
-        </label>
-        <div className="space-y-1">
-          <button
-            onClick={() => onTamilMonthChange(null)}
-            className={radioBtn(selectedTamilMonth === null)}
-          >
-            {t(lang, 'festivals.filters.anyMonth')}
-          </button>
-          {tamilMonths.map((m) => (
-            <button
-              key={m.value}
-              onClick={() => onTamilMonthChange(m.value)}
-              className={radioBtn(selectedTamilMonth === m.value)}
-            >
-              {ta ? m.labelTa : m.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Tithi */}
-      <div>
-        <label className={filterLabel}>
-          {t(lang, 'festivals.filters.tithi')}
-        </label>
-        <div className="space-y-1">
-          <button
-            onClick={() => onTithiChange(null)}
-            className={radioBtn(selectedTithi === null)}
-          >
-            {t(lang, 'festivals.filters.anyTithi')}
-          </button>
-          <button
-            onClick={() => onTithiChange('pournami')}
-            className={radioBtn(selectedTithi === 'pournami')}
-          >
-            <span className="text-[16px]">☾</span>
-            {ta ? 'பௌர்ணமி' : 'Pournami (Full Moon)'}
-          </button>
-          <button
-            onClick={() => onTithiChange('amavasya')}
-            className={radioBtn(selectedTithi === 'amavasya')}
-          >
-            <span className="text-[16px]">◑</span>
-            {ta ? 'அமாவாசை' : 'Amavasya (New Moon)'}
-          </button>
-        </div>
-      </div>
-
       {/* Deity (search + list) */}
       <div>
         <label className={filterLabel}>

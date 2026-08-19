@@ -1,3 +1,4 @@
+import Header from '@/components/layout/Header';
 import FestivalsPage from '@/components/festivals/FestivalsPage';
 
 export const metadata = {
@@ -6,5 +7,12 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <FestivalsPage />;
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1">
+        <FestivalsPage />
+      </main>
+    </div>
+  );
 }
