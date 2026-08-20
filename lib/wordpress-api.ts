@@ -61,6 +61,17 @@ interface WPTemple {
     deity:             string;
     area:              string;
     description:       string;
+    timingSummary?:    string;
+    timingNote?:       string;
+    established?:      string;
+    phone?:            string;
+    address?:          string;
+    latitude?:         number | string;
+    longitude?:        number | string;
+    poojas?:           Array<{ pooja_name: string; pooja_time: string }>;
+    distances?:        Array<{ place_key: string; place_name: string; km: number | string }>;
+    historyEn?:        string;
+    facilities?:       string[];
   };
 }
 
@@ -97,16 +108,47 @@ export async function fetchTemples(limit = 20): Promise<Temple[]> {
     const posts = await wpFetch<WPTemple[]>(
       `/temples?per_page=${limit}&orderby=date&order=desc`
     );
-    return posts.map((p, i) => ({
-      id:           p.slug,
-      name:         p.title.rendered,
-      area:         p.acf?.area         ?? '',
-      city:         p.acf?.city         ?? 'Chennai',
-      pincode:      '', // Not in our CPT yet
-      imageUrl:     unsplashFallback(i),
-      gradientFrom: '#8B1A1A',
-      gradientTo:   '#5A1010',
-    }));
+    return posts.map((p, i) => {
+      const lat = p.acf?.latitude ? Number(p.acf.latitude) : undefined;
+      const lng = p.acf?.longitude ? Number(p.acf.longitude) : undefined;
+
+      return {
+        id:           p.slug,
+        name:         p.title.rendered,
+        area:         p.acf?.area         ?? '',
+        city:         p.acf?.city         ?? 'Chennai',
+        pincode:      '', // Not in our CPT yet
+        imageUrl:     unsplashFallback(i),
+        gradientFrom: '#8B1A1A',
+        gradientTo:   '#5A1010',
+
+        // Optional detail-page fields from ACF
+        deity:        p.acf?.deity,
+        established:  p.acf?.established,
+        timingSummary: p.acf?.timingSummary,
+        timingNote:   p.acf?.timingNote,
+        phone:        p.acf?.phone,
+        address:      p.acf?.address,
+        historyEn:    p.acf?.historyEn ? [p.acf.historyEn] : undefined,
+
+        // Poojas array — map from repeater
+        poojas:       p.acf?.poojas?.map((pooja) => ({
+          name: pooja.pooja_name ?? '',
+          time: pooja.pooja_time ?? '',
+        })),
+
+        // Distances array — map from repeater
+        distances:    p.acf?.distances?.map((dist) => ({
+          key:   dist.place_key ?? '',
+          place: dist.place_name ?? '',
+          km:    Number(dist.km) ?? 0,
+        })),
+
+        // Facilities and coords (if available)
+        facilities:   p.acf?.facilities,
+        coords:       (lat && lng) ? { lat, lng } : undefined,
+      };
+    });
   } catch (err) {
     console.warn('[HRCE] WordPress unavailable — using static temple data:', err);
     return staticTemples.slice(0, limit);
@@ -121,6 +163,9 @@ export async function fetchTempleBySlug(slug: string): Promise<Temple | null> {
     if (!posts || posts.length === 0) return null;
 
     const p = posts[0];
+    const lat = p.acf?.latitude ? Number(p.acf.latitude) : undefined;
+    const lng = p.acf?.longitude ? Number(p.acf.longitude) : undefined;
+
     return {
       id:           p.slug,
       name:         p.title.rendered,
@@ -130,6 +175,32 @@ export async function fetchTempleBySlug(slug: string): Promise<Temple | null> {
       imageUrl:     unsplashFallback(0),
       gradientFrom: '#8B1A1A',
       gradientTo:   '#5A1010',
+
+      // Optional detail-page fields from ACF
+      deity:        p.acf?.deity,
+      established:  p.acf?.established,
+      timingSummary: p.acf?.timingSummary,
+      timingNote:   p.acf?.timingNote,
+      phone:        p.acf?.phone,
+      address:      p.acf?.address,
+      historyEn:    p.acf?.historyEn ? [p.acf.historyEn] : undefined,
+
+      // Poojas array — map from repeater
+      poojas:       p.acf?.poojas?.map((pooja) => ({
+        name: pooja.pooja_name ?? '',
+        time: pooja.pooja_time ?? '',
+      })),
+
+      // Distances array — map from repeater
+      distances:    p.acf?.distances?.map((dist) => ({
+        key:   dist.place_key ?? '',
+        place: dist.place_name ?? '',
+        km:    Number(dist.km) ?? 0,
+      })),
+
+      // Facilities and coords (if available)
+      facilities:   p.acf?.facilities,
+      coords:       (lat && lng) ? { lat, lng } : undefined,
     };
   } catch (err) {
     console.warn('[HRCE] WordPress unavailable for temple slug:', slug, err);
