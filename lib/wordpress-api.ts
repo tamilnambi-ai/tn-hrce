@@ -52,13 +52,15 @@ const unsplashFallback = (index: number, w = 800, h = 600) => {
 
 // ── raw WP response shapes ─────────────────────────────────────────────────
 interface WPTemple {
+  id:                  number;
   slug:                string;
   title:               { rendered: string };
-  featured_image_url:  string | null;
+  featured_media:      number;
   acf: {
-    hrce_temple_area:    string;
-    hrce_temple_city:    string;
-    hrce_temple_pincode: string;
+    city:              string;
+    deity:             string;
+    area:              string;
+    description:       string;
   };
 }
 
@@ -93,21 +95,45 @@ interface WPPackage {
 export async function fetchTemples(limit = 20): Promise<Temple[]> {
   try {
     const posts = await wpFetch<WPTemple[]>(
-      `/hrce_temple?per_page=${limit}&orderby=menu_order&order=asc`
+      `/temples?per_page=${limit}&orderby=date&order=desc`
     );
     return posts.map((p, i) => ({
       id:           p.slug,
       name:         p.title.rendered,
-      area:         p.acf?.hrce_temple_area    ?? '',
-      city:         p.acf?.hrce_temple_city    ?? '',
-      pincode:      p.acf?.hrce_temple_pincode ?? '',
-      imageUrl:     p.featured_image_url ?? unsplashFallback(i),
+      area:         p.acf?.area         ?? '',
+      city:         p.acf?.city         ?? 'Chennai',
+      pincode:      '', // Not in our CPT yet
+      imageUrl:     unsplashFallback(i),
       gradientFrom: '#8B1A1A',
       gradientTo:   '#5A1010',
     }));
   } catch (err) {
     console.warn('[HRCE] WordPress unavailable — using static temple data:', err);
     return staticTemples.slice(0, limit);
+  }
+}
+
+export async function fetchTempleBySlug(slug: string): Promise<Temple | null> {
+  try {
+    const posts = await wpFetch<WPTemple[]>(
+      `/temples?slug=${slug}&per_page=1`
+    );
+    if (!posts || posts.length === 0) return null;
+
+    const p = posts[0];
+    return {
+      id:           p.slug,
+      name:         p.title.rendered,
+      area:         p.acf?.area         ?? '',
+      city:         p.acf?.city         ?? 'Chennai',
+      pincode:      '', // Not in our CPT yet
+      imageUrl:     unsplashFallback(0),
+      gradientFrom: '#8B1A1A',
+      gradientTo:   '#5A1010',
+    };
+  } catch (err) {
+    console.warn('[HRCE] WordPress unavailable for temple slug:', slug, err);
+    return null;
   }
 }
 

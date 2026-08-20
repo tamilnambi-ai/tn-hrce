@@ -1,12 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Search, X, SlidersHorizontal, ChevronDown, Lock } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useCity } from '@/contexts/CityContext';
 import { useTemplesSearch } from '@/contexts/TemplesSearchContext';
 import { t } from '@/lib/i18n';
-import { templesByCity, searchTemples } from '@/data/temples';
+import { searchTemples } from '@/data/temples';
+import { fetchTemples } from '@/lib/wordpress-api';
+import type { Temple } from '@/data/temples';
 import TempleCard from '@/components/cards/TempleCard';
 import { cn } from '@/lib/utils';
 
@@ -96,16 +98,28 @@ export default function TemplesListingPage() {
   const { lang } = useLanguage();
   const { city } = useCity();
   const { query } = useTemplesSearch();
+  const [temples, setTemples] = useState<Temple[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const cityName = lang === 'ta' ? city.nameTa : city.name;
   const taClass = lang === 'ta' ? 'ta-text' : '';
 
+  // Fetch temples from WordPress on mount
+  useEffect(() => {
+    setLoading(true);
+    fetchTemples(100).then((data) => {
+      setTemples(data);
+      setLoading(false);
+    });
+  }, []);
+
   // Live search results (scoped to current city). If empty query, show all.
   const results = useMemo(() => {
     const q = query.trim();
-    if (!q) return templesByCity(city.id, 100);
+    const cityTemples = temples.filter((t) => t.city.toLowerCase() === city.id.toLowerCase());
+    if (!q) return cityTemples;
     return searchTemples(q, city.id);
-  }, [query, city.id]);
+  }, [query, city.id, temples]);
 
   const countLabel = results.length === 1
     ? t(lang, 'templesPage.resultsCountOne')
@@ -136,7 +150,13 @@ export default function TemplesListingPage() {
         <FiltersSidebar />
 
         <div className="flex-1 min-w-0">
-          {results.length > 0 ? (
+          {loading ? (
+            <div className={cn('bg-white border border-[--color-border] rounded-2xl px-6 py-16 text-center', taClass)}>
+              <p className="text-[16px] font-semibold text-[--color-text-primary]">
+                {t(lang, 'templesPage.loading')}
+              </p>
+            </div>
+          ) : results.length > 0 ? (
             <div key={city.id + query} className="city-fade grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {results.map((temple) => (
                 <TempleCard key={temple.id} temple={temple} />
