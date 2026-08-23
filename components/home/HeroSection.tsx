@@ -124,8 +124,8 @@ export default function HeroSection() {
             onError={() => setImgOk(false)}
           />
         ) : null}
-        {/* Bottom white veil — lifts heading + search readability */}
-        <div className="absolute inset-x-0 bottom-0 h-[20%] bg-gradient-to-t from-white/60 to-transparent" />
+        {/* Bottom veil — lifts heading + search readability */}
+        <div className="absolute inset-x-0 bottom-0 h-[20%] bg-gradient-to-t from-[#ffefe0]/80 to-transparent" />
       </div>
 
       {/* ── Content: heading + search, top-aligned with breathing room from header ── */}
@@ -145,7 +145,7 @@ export default function HeroSection() {
               const heading  = t(lang, 'hero.heading', { city: '__CITY__' });
               const parts    = heading.split('__CITY__');
               return (
-                <h1 className={`text-neutral-900 text-center text-[20px] md:text-[26px] font-bold pt-5 pb-2 px-6 ${lang === 'ta' ? 'ta-text' : ''}`}>
+                <h1 className={`text-neutral-900 text-center font-bold pt-5 pb-2 px-6 ${lang === 'ta' ? 'ta-text text-[16px] md:text-[20px]' : 'text-[20px] md:text-[26px]'}`}>
                   {parts[0]}
                   <span className="text-amber-600">{cityName}</span>
                   {parts[1]}
