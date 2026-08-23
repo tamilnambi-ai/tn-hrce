@@ -105,16 +105,22 @@ export default function HeroSection() {
     inputRef.current?.focus();
   }
 
+  // The hero has no fixed height. Its old clamp() was driven by vh while the
+  // image scales with width, so on any tall-and-narrow viewport (phone, tablet
+  // portrait) the section outgrew the image and left a gap above the search card.
+  // Now the image sits in normal flow and the section is exactly as tall as its
+  // content; the card is pulled up by a responsive negative margin so it always
+  // tucks into the image's bottom fade at every width.
   return (
-    <section className="relative w-full bg-[#ffefe0]" style={{ height: 'clamp(432px, 61vh, 612px)' }}>
+    <section className="relative w-full bg-[#ffefe0] overflow-hidden">
 
-      {/* ── Hero image — scaled down, centered, radial soft-edge fade ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-start justify-center">
+      {/* ── Hero image — always in normal flow, so it defines the section height ── */}
+      <div className="relative pointer-events-none overflow-hidden flex items-start justify-center">
         {imgOk ? (
           <img
             src={HERO_IMAGE}
             alt="Tamil Nadu Temple"
-            className="max-h-full w-auto max-w-[94%]"
+            className="w-auto max-w-[94%] max-h-[58vh]"
             style={{
               WebkitMaskImage:
                 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 2%, rgba(0,0,0,0.8) 6%, black 9%, black 91%, rgba(0,0,0,0.8) 94%, rgba(0,0,0,0.3) 98%, transparent 100%)',
@@ -129,7 +135,7 @@ export default function HeroSection() {
       </div>
 
       {/* ── Content: heading + search, top-aligned with breathing room from header ── */}
-      <div className="relative z-20 container-page h-full flex flex-col items-center justify-end pb-6 md:pb-8">
+      <div className="relative z-20 container-page flex flex-col items-center -mt-5 sm:-mt-10 md:-mt-16 lg:-mt-28 pb-8 md:pb-10">
 
         {/* Unified search card — heading + input as one surface blended with background */}
         <div ref={containerRef} className="relative w-full max-w-[640px]">

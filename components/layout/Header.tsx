@@ -187,10 +187,11 @@ function HeaderInner() {
           </div>
 
           {/* Divider */}
-          <div className="hidden md:block w-px h-6 bg-[--color-border] flex-shrink-0" />
+          <div className="hidden lg:block w-px h-6 bg-[--color-border] flex-shrink-0" />
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center flex-1 gap-1">
+          {/* Desktop nav — held until lg: the bold uppercase labels are wide
+              enough that logo + city + nav + lang + Login overflows at md. */}
+          <nav className="hidden lg:flex items-center flex-1 gap-1">
             {navItems.map(({ key, href, Icon, match }) => {
               const active = match();
               return (
@@ -212,7 +213,7 @@ function HeaderInner() {
           </nav>
 
           {/* Desktop right actions */}
-          <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+          <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
             <LangToggle />
             <div className="w-px h-5 bg-[--color-border]" />
             <Link
@@ -224,7 +225,7 @@ function HeaderInner() {
           </div>
 
           {/* Mobile right */}
-          <div className="flex md:hidden items-center gap-2 ml-auto">
+          <div className="flex lg:hidden items-center gap-2 ml-auto">
             <LangToggle />
             <button
               onClick={() => setOpen(!open)}
@@ -239,7 +240,7 @@ function HeaderInner() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-[--color-border] bg-[--color-surface] animate-slideDown">
+        <div className="lg:hidden border-t border-[--color-border] bg-[--color-surface] animate-slideDown">
           <div className="container-page py-4 space-y-0.5">
             {navItems.map(({ key, href, Icon, match }) => {
               const active = match();

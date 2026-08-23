@@ -91,7 +91,7 @@ export default function SpotlightActions() {
   return (
     <>
       <section className="bg-[#ffefe0]">
-        <div className="container-page pt-[56px]">
+        <div className="container-page pt-7 md:pt-[56px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
             <ActionTile
               onClick={openBook}
