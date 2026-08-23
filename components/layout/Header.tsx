@@ -83,7 +83,7 @@ function CitySelector() {
           'flex items-center gap-1.5 px-3 py-2 rounded-xl border transition-all duration-150',
           open
             ? 'bg-[--color-site-name] border-[--color-site-name] text-white shadow-md'
-            : 'bg-[--color-surface-muted] border-[--color-border] text-[--color-text-primary] hover:border-[--color-site-name] hover:text-[--color-site-name]'
+            : 'bg-white border-[--color-border] text-[--color-text-primary] hover:border-[--color-site-name] hover:text-[--color-site-name]'
         )}
         aria-label="Select city"
       >
