@@ -72,7 +72,9 @@ function CountdownBadge({ days, ta }: { days: number; ta: boolean }) {
   );
 }
 
-function KudamulukuCard({ item }: { item: Kudamuluku }) {
+// `href` overrides the default kudamuluku-detail destination, so the section can
+// point the first card at a real temple page instead of the placeholder.
+function KudamulukuCard({ item, href }: { item: Kudamuluku; href?: string }) {
   const { lang } = useLanguage();
   const ta = lang === 'ta';
   const temple = ta ? (item.templeTa ?? item.temple) : item.temple;
@@ -81,7 +83,7 @@ function KudamulukuCard({ item }: { item: Kudamuluku }) {
   const taClass = ta ? 'ta-text' : '';
 
   return (
-    <Link href={`/placeholder?page=kudamuluku&id=${item.id}`} className="card-root group block">
+    <Link href={href ?? `/placeholder?page=kudamuluku&id=${item.id}`} className="card-root group block">
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
         <img src={item.imageUrl} alt={temple} className="card-img" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -131,8 +133,14 @@ export default function KudamulukuSection() {
         </div>
 
         <div key={city.id} className="city-fade grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {DEMO.map((item) => (
-            <KudamulukuCard key={item.id} item={item} />
+          {DEMO.map((item, i) => (
+            // First card links through to a real temple page so the flow is
+            // clickable end-to-end; the rest still open the kudamuluku placeholder.
+            <KudamulukuCard
+              key={item.id}
+              item={item}
+              href={i === 0 ? '/temples/kapaleeswarar' : undefined}
+            />
           ))}
         </div>
       </div>

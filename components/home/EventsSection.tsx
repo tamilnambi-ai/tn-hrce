@@ -37,8 +37,14 @@ export default function EventsSection() {
 
         {events.length > 0 ? (
           <div key={city.id} className="city-fade grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
+            {events.map((event, i) => (
+              // First card links through to a real temple page so the flow is
+              // clickable end-to-end; the rest still open the event placeholder.
+              <EventCard
+                key={event.id}
+                event={event}
+                href={i === 0 ? '/temples/kapaleeswarar' : undefined}
+              />
             ))}
           </div>
         ) : (

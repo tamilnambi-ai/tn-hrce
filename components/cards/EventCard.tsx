@@ -6,7 +6,9 @@ import { Calendar, Clock, MapPin } from 'lucide-react';
 import { TempleEvent } from '@/data/events';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-interface Props { event: TempleEvent }
+// `href` overrides the default event-detail destination. Used by EventsSection to
+// point the first card at a real temple page instead of the placeholder.
+interface Props { event: TempleEvent; href?: string }
 
 function EventImage({ event, alt, badge }: { event: TempleEvent; alt: string; badge: string }) {
   const [failed, setFailed] = useState(false);
@@ -33,7 +35,7 @@ function EventImage({ event, alt, badge }: { event: TempleEvent; alt: string; ba
   );
 }
 
-export default function EventCard({ event }: Props) {
+export default function EventCard({ event, href }: Props) {
   const { lang } = useLanguage();
   const ta = lang === 'ta';
   const title       = ta ? (event.titleTa           ?? event.title)           : event.title;
@@ -46,7 +48,7 @@ export default function EventCard({ event }: Props) {
   const taClass     = ta ? 'ta-text' : '';
 
   return (
-    <Link href={`/placeholder?page=events&id=${event.id}`} className="card-root group block">
+    <Link href={href ?? `/placeholder?page=events&id=${event.id}`} className="card-root group block">
       <EventImage event={event} alt={title} badge={badge} />
       <div className="mt-3 px-0.5">
         <h3 className={`text-[15px] font-semibold text-neutral-900 leading-snug group-hover:text-[--color-site-name] transition-colors ${taClass}`}>
