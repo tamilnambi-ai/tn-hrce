@@ -65,8 +65,8 @@ export default function WelcomeModal() {
       {/* Backdrop — no dismiss on click */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-      {/* Modal card */}
-      <div className="relative w-full max-w-[560px] max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+      {/* Modal card — constrained to fit mobile with safe margins */}
+      <div className="relative w-[min(90vw,560px)] max-h-[92vh] overflow-y-auto bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
         {/* Close button (defaults to Chennai) */}
         <button
           onClick={handleClose}
@@ -97,7 +97,7 @@ export default function WelcomeModal() {
         </div>
 
         {/* Body */}
-        <div className="p-6 md:p-7">
+        <div className="p-4 sm:p-6 md:p-7">
           {!showAll ? (
             <>
               {/* Brief — Tamil first, English second */}

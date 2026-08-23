@@ -80,16 +80,16 @@ function CitySelector() {
       <button
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          'flex items-center gap-1.5 px-3 py-2 rounded-xl border transition-all duration-150',
+          'flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border transition-all duration-150 flex-shrink-0',
           open
             ? 'bg-[--color-site-name] border-[--color-site-name] text-white shadow-md'
             : 'bg-white border-[--color-border] text-[--color-text-primary] hover:border-[--color-site-name] hover:text-[--color-site-name]'
         )}
         aria-label="Select city"
       >
-        <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-        <span className={cn('text-[13px] font-bold tracking-tight', lang === 'ta' && 'ta-text')}>{displayName}</span>
-        <ChevronDown className={cn('w-3.5 h-3.5 transition-transform duration-200', open && 'rotate-180')} />
+        <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
+        <span className={cn('text-[12px] sm:text-[13px] font-bold tracking-tight whitespace-nowrap', lang === 'ta' && 'ta-text')}>{displayName}</span>
+        <ChevronDown className={cn('w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform duration-200 flex-shrink-0', open && 'rotate-180')} />
       </button>
 
       {/* Dropdown */}
@@ -168,13 +168,13 @@ function HeaderInner() {
   return (
     <header className="sticky top-0 z-50 bg-[--color-header-bg] border-b border-[--color-header-border]">
       <div className="container-page">
-        <div className="flex items-center h-[72px] gap-4">
+        <div className="flex items-center h-[72px] gap-2 sm:gap-3 lg:gap-4">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0 group text-[--color-site-name]">
-            <LogoMark />
+          <Link href="/" className="flex items-center gap-1 sm:gap-2 flex-shrink-0 group text-[--color-site-name]">
+            <LogoMark className="w-5 h-5 sm:w-6 sm:h-7" />
             <span className={cn(
-              'font-bold leading-tight tracking-tight transition-opacity group-hover:opacity-75',
+              'font-bold leading-tight tracking-tight transition-opacity group-hover:opacity-75 hidden sm:inline',
               lang === 'ta' ? 'text-[11px] ta-text max-w-[120px]' : 'text-[15px]'
             )}>
               {t(lang, 'header.siteName')}
