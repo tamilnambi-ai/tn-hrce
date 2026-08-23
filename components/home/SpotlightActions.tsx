@@ -42,19 +42,19 @@ function ActionTile(props: TileProps) {
 
       <div className="relative flex-1 min-w-0 h-[72px] md:h-[76px]">
         <div className="absolute inset-0 flex items-center opacity-100 group-hover:opacity-0 transition-opacity duration-200">
-          <h3 className={`text-neutral-900 text-[15px] md:text-[16px] font-bold leading-tight w-full ${taClass}`}>
+          <h3 className={`text-neutral-900 font-bold leading-tight w-full ${ta ? 'text-[13px] md:text-[14px]' : 'text-[15px] md:text-[16px]'} ${taClass}`}>
             {headline}
           </h3>
         </div>
         <div className="absolute inset-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <p className={`text-neutral-600 text-[12px] md:text-[13px] leading-snug line-clamp-3 w-full ${taClass}`}>
+          <p className={`text-neutral-600 leading-snug line-clamp-3 w-full ${ta ? 'text-[11px] md:text-[12px]' : 'text-[12px] md:text-[13px]'} ${taClass}`}>
             {benefit}
           </p>
         </div>
       </div>
 
       <span
-        className={`relative inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-white text-[12px] font-semibold shadow-sm flex-shrink-0 group-hover:gap-1.5 transition-all ${accentBgClass} ${taClass}`}
+        className={`relative inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-white font-semibold shadow-sm flex-shrink-0 group-hover:gap-1.5 transition-all ${ta ? 'text-[11px]' : 'text-[12px]'} ${accentBgClass} ${taClass}`}
       >
         {cta}
         <ArrowRight className="w-3 h-3" />
