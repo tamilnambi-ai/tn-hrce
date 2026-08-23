@@ -14,8 +14,8 @@
   --token-brand-accent:         #B5451B;   /* warm secondary CTA */
 
   /* ── Neutral scale ── */
-  --token-neutral-0:   #FFFFFF;
-  --token-neutral-50:  #F7F7F7;
+  --token-neutral-0:   #FAF6EE;
+  --token-neutral-50:  #F3EEEA;
   --token-neutral-100: #EBEBEB;
   --token-neutral-200: #E0E0E0;
   --token-neutral-300: #C2C2C2;
@@ -78,7 +78,7 @@ html {
 }
 
 body {
-  background-color: var(--color-background);
+  background-color: #FAF6EE;
   color: var(--color-text-primary);
   font-family: 'Merriweather', serif;
   line-height: 1.5;
