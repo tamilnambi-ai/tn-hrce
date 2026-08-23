@@ -60,7 +60,7 @@ export default function HomeDonationModal({ open, onClose }: { open: boolean; on
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative bg-[#FAF6EE] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] w-full max-w-[520px] max-h-[94vh] flex flex-col overflow-hidden">
+      <div className="relative bg-[#ffefe0] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] w-full max-w-[520px] max-h-[94vh] flex flex-col overflow-hidden">
         <button
           onClick={onClose}
           aria-label={t(lang, 'bookPooja.closeModal')}
@@ -93,7 +93,7 @@ export default function HomeDonationModal({ open, onClose }: { open: boolean; on
               value={templeId ?? ''}
               onChange={(e) => setTempleId(e.target.value)}
               className={cn(
-                'w-full appearance-none rounded-lg border border-neutral-300 bg-[#FAF6EE]',
+                'w-full appearance-none rounded-lg border border-neutral-300 bg-[#ffefe0]',
                 'px-3 py-2 pr-9 text-[13px] font-semibold text-neutral-900',
                 'focus:outline-none focus:ring-2 focus:ring-[--color-site-name]/30 focus:border-[--color-site-name]',
                 taClass

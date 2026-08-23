@@ -16,7 +16,7 @@ export default function QuickActions() {
   const { lang } = useLanguage();
 
   return (
-    <section className="bg-[#FAF6EE] border-b border-[--color-border]">
+    <section className="bg-[#ffefe0] border-b border-[--color-border]">
       <div className="container-page">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-0 divide-x divide-[--color-border]">
           {actions.map(({ key, href, Icon, iconColor, iconBg }) => (

@@ -63,7 +63,7 @@ function ActionTile(props: TileProps) {
   );
 
   const shellClass =
-    'relative overflow-hidden rounded-2xl px-5 py-8 md:px-6 md:py-10 flex items-center gap-4 group bg-[#FAF6EE] border border-neutral-200 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:border-neutral-300';
+    'relative overflow-hidden rounded-2xl px-5 py-8 md:px-6 md:py-10 flex items-center gap-4 group bg-[#ffefe0] border border-neutral-200 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:border-neutral-300';
 
   return 'onClick' in props ? (
     <button type="button" onClick={props.onClick} className={`${shellClass} text-left w-full`}>
@@ -90,7 +90,7 @@ export default function SpotlightActions() {
 
   return (
     <>
-      <section className="bg-[#FAF6EE]">
+      <section className="bg-[#ffefe0]">
         <div className="container-page pt-[56px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
             <ActionTile

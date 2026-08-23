@@ -15,7 +15,7 @@ export default function EventsSection() {
   const cityName = lang === 'ta' ? city.nameTa : city.name;
 
   return (
-    <section className="bg-[#FAF6EE]">
+    <section className="bg-[#ffefe0]">
       <div className="container-page py-12 md:py-16">
         <div className="flex items-end justify-between mb-6 md:mb-8">
           <div>

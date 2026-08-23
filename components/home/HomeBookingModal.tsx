@@ -156,7 +156,7 @@ export default function HomeBookingModal({ open, onClose }: { open: boolean; onC
     <div role="dialog" aria-modal="true" className="fixed inset-0 z-[95] flex items-center justify-center p-2 md:p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative bg-[#FAF6EE] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] w-full max-w-[720px] h-[92vh] md:h-[720px] flex flex-col overflow-hidden">
+      <div className="relative bg-[#ffefe0] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] w-full max-w-[720px] h-[92vh] md:h-[720px] flex flex-col overflow-hidden">
         <button
           onClick={onClose}
           aria-label={t(lang, 'bookPooja.closeModal')}
@@ -232,7 +232,7 @@ export default function HomeBookingModal({ open, onClose }: { open: boolean; onC
                   value={templeId ?? ''}
                   onChange={(e) => setTempleId(e.target.value)}
                   className={cn(
-                    'w-full appearance-none rounded-lg border border-neutral-300 bg-[#FAF6EE]',
+                    'w-full appearance-none rounded-lg border border-neutral-300 bg-[#ffefe0]',
                     'px-3 py-2.5 pr-9 text-[14px] font-semibold text-neutral-900',
                     'focus:outline-none focus:ring-2 focus:ring-[--color-site-name]/30 focus:border-[--color-site-name]',
                     taClass
@@ -306,7 +306,7 @@ function TypeToggle({
     'flex-1 flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-[13px] font-semibold transition-colors',
     active
       ? 'bg-[--color-site-name] text-white'
-      : 'bg-[#FAF6EE] text-neutral-700 border border-neutral-200 hover:border-neutral-300'
+      : 'bg-[#ffefe0] text-neutral-700 border border-neutral-200 hover:border-neutral-300'
   );
   return (
     <div className="flex gap-2">
