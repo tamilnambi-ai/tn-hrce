@@ -135,7 +135,7 @@ export default function HeroSection() {
         <div ref={containerRef} className="relative w-full max-w-[640px]">
           <div
             className={cn(
-              'transition-all duration-200 bg-[#ffefe0] border border-white/40 shadow-sm overflow-hidden backdrop-blur-sm',
+              'transition-all duration-200 bg-[#ffefe0] border border-white/40 shadow-sm overflow-hidden backdrop-blur-sm search-card-fade',
               open && results.length ? 'rounded-t-2xl rounded-b-none bg-[#ffefe0]' : 'rounded-2xl'
             )}
           >
@@ -166,7 +166,7 @@ export default function HeroSection() {
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => { if (results.length) setOpen(true); }}
                 placeholder={t(lang, 'search.placeholder')}
-                className="flex-1 bg-transparent text-[15px] text-neutral-900 placeholder:text-neutral-400 outline-none font-medium"
+                className="flex-1 bg-transparent text-[15px] text-[--color-site-name] placeholder:text-[#C9706E] outline-none font-medium border-b-2 border-[--color-site-name] py-1"
                 autoComplete="off"
               />
               {query ? (
@@ -186,7 +186,7 @@ export default function HeroSection() {
 
           {/* ── Dropdown results ── */}
           {open && (
-            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-sm overflow-hidden search-dropdown z-50 border-t border-white/40 border-l border-r border-white/40">
+            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-sm overflow-hidden search-dropdown z-50 border-t border-white/40 border-l border-r border-white/40 search-card-fade">
               {results.length > 0 ? (
                 <>
                   <div className="px-5 py-2.5 border-b border-neutral-100">

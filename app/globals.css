@@ -197,6 +197,20 @@ section[data-anchor] { scroll-margin-top: 140px; }
 }
 
 /* ─────────────────────────────────────────────────────────────
+   SEARCH CARD — Soft edge fade + blur effect
+   Fades edges (left, top, right) into background for integrated look
+   ───────────────────────────────────────────────────────────── */
+.search-card-fade {
+  /* Outer fade — card edges dissolve into background image (subtle opacity) */
+  position: relative;
+  box-shadow:
+    0 0 60px 30px rgba(255, 239, 224, 0.3),
+    -80px 0 100px 40px rgba(255, 239, 224, 0.2),
+    80px 0 100px 40px rgba(255, 239, 224, 0.2),
+    0 -60px 100px 30px rgba(255, 239, 224, 0.15);
+}
+
+/* ─────────────────────────────────────────────────────────────
    SCROLLBAR
    ───────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar            { width: 5px; }
