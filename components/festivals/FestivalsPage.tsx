@@ -138,7 +138,7 @@ export default function FestivalsPage() {
                     'px-6 py-3 rounded-xl text-[15px] font-bold transition-all whitespace-nowrap border-2',
                     selectedSeason === season.value
                       ? 'bg-red-700 text-white border-red-800'
-                      : 'bg-neutral-200 text-neutral-700 border-neutral-300 hover:bg-neutral-300',
+                      : 'bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50',
                     taClass
                   )}
                 >
