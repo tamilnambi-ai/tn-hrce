@@ -111,8 +111,14 @@ export default function HeroSection() {
   // Now the image sits in normal flow and the section is exactly as tall as its
   // content; the card is pulled up by a responsive negative margin so it always
   // tucks into the image's bottom fade at every width.
+  // The section uses overflow-x-clip, NOT overflow-hidden: the search dropdown is
+  // absolutely positioned and hangs below this section's box, and `hidden` clipped
+  // it (only the results header survived). `clip` still blocks sideways scroll but
+  // lets vertical overflow escape. overflow-x:hidden would not work either —
+  // hidden on one axis forces the other to `auto`, which clips again.
+  // The hero image below keeps its own overflow-hidden for the mask.
   return (
-    <section className="relative w-full bg-[#ffefe0] overflow-hidden">
+    <section className="relative w-full bg-[#ffefe0] overflow-x-clip">
 
       {/* ── Hero image — always in normal flow, so it defines the section height ── */}
       <div className="relative pointer-events-none overflow-hidden flex items-start justify-center">
@@ -142,7 +148,7 @@ export default function HeroSection() {
           <div
             className={cn(
               'transition-all duration-200 bg-[#ffefe0] border border-white/40 shadow-sm backdrop-blur-sm search-card-fade',
-              open && results.length ? 'rounded-t-2xl rounded-b-none bg-[#ffefe0]' : 'rounded-2xl overflow-hidden'
+              open && results.length ? 'rounded-t-2xl rounded-b-none bg-[#ffefe0] overflow-hidden' : 'rounded-2xl overflow-hidden'
             )}
           >
             {/* Heading row */}
@@ -192,7 +198,7 @@ export default function HeroSection() {
 
           {/* ── Dropdown results ── */}
           {open && (
-            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-2xl search-dropdown z-50 border-t border-white/40 border-l border-r border-white/40">
+            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-2xl overflow-hidden search-dropdown z-50 border-t border-white/40 border-l border-r border-white/40">
               {results.length > 0 ? (
                 <>
                   <div className="px-5 py-2.5 border-b border-neutral-100">
