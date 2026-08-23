@@ -141,8 +141,8 @@ export default function HeroSection() {
         <div ref={containerRef} className="relative w-full max-w-[640px]">
           <div
             className={cn(
-              'transition-all duration-200 bg-[#ffefe0] border border-white/40 shadow-sm overflow-hidden backdrop-blur-sm search-card-fade',
-              open && results.length ? 'rounded-t-2xl rounded-b-none bg-[#ffefe0]' : 'rounded-2xl'
+              'transition-all duration-200 bg-[#ffefe0] border border-white/40 shadow-sm backdrop-blur-sm search-card-fade',
+              open && results.length ? 'rounded-t-2xl rounded-b-none bg-[#ffefe0]' : 'rounded-2xl overflow-hidden'
             )}
           >
             {/* Heading row */}
