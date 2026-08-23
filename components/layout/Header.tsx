@@ -172,7 +172,9 @@ function HeaderInner() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1 sm:gap-2 flex-shrink-0 group text-[--color-site-name]">
-            <LogoMark className="w-5 h-5 sm:w-6 sm:h-7" />
+            <div className="w-5 h-5 sm:w-6 sm:h-7 flex-shrink-0">
+              <LogoMark />
+            </div>
             <span className={cn(
               'font-bold leading-tight tracking-tight transition-opacity group-hover:opacity-75 hidden sm:inline',
               lang === 'ta' ? 'text-[11px] ta-text max-w-[120px]' : 'text-[15px]'
