@@ -131,11 +131,11 @@ export default function HeroSection() {
       {/* ── Content: heading + search, top-aligned with breathing room from header ── */}
       <div className="relative z-20 container-page h-full flex flex-col items-center justify-end pb-6 md:pb-8">
 
-        {/* Unified search card — heading + input as one white surface */}
+        {/* Unified search card — heading + input as one surface blended with background */}
         <div ref={containerRef} className="relative w-full max-w-[640px]">
           <div
             className={cn(
-              'transition-all duration-200 bg-[#ffefe0] shadow-hero-search overflow-hidden',
+              'transition-all duration-200 bg-[#ffefe0] border border-white/40 shadow-sm overflow-hidden backdrop-blur-sm',
               open && results.length ? 'rounded-t-2xl rounded-b-none bg-[#ffefe0]' : 'rounded-2xl'
             )}
           >
@@ -186,7 +186,7 @@ export default function HeroSection() {
 
           {/* ── Dropdown results ── */}
           {open && (
-            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-dropdown overflow-hidden search-dropdown z-50 border-t border-neutral-100">
+            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-sm overflow-hidden search-dropdown z-50 border-t border-white/40 border-l border-r border-white/40">
               {results.length > 0 ? (
                 <>
                   <div className="px-5 py-2.5 border-b border-neutral-100">
