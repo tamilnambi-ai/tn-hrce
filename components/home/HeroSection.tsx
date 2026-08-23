@@ -186,7 +186,7 @@ export default function HeroSection() {
 
           {/* ── Dropdown results ── */}
           {open && (
-            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-sm overflow-hidden search-dropdown z-50 border-t border-white/40 border-l border-r border-white/40 search-card-fade">
+            <div className="absolute left-0 right-0 top-full bg-[#ffefe0] rounded-b-2xl shadow-sm overflow-hidden search-dropdown z-50 border-t border-white/40 border-l border-r border-white/40">
               {results.length > 0 ? (
                 <>
                   <div className="px-5 py-2.5 border-b border-neutral-100">
