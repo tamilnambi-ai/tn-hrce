@@ -198,7 +198,7 @@ function HeaderInner() {
                   key={key}
                   href={href}
                   className={cn(
-                    'flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-semibold transition-all duration-150 relative',
+                    'flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-bold uppercase transition-all duration-150 relative',
                     active
                       ? 'text-[--color-site-name] bg-red-50'
                       : 'text-[--color-nav-link] hover:text-[--color-nav-link-hover] hover:bg-neutral-50'
@@ -216,14 +216,8 @@ function HeaderInner() {
             <LangToggle />
             <div className="w-px h-5 bg-[--color-border]" />
             <Link
-              href="/placeholder?page=donate"
-              className="px-4 py-2 rounded-lg bg-[--color-btn-primary-bg] text-[--color-btn-primary-text] text-[13px] font-semibold hover:bg-[--color-btn-primary-hover] transition-colors"
-            >
-              {t(lang, 'nav.donate')}
-            </Link>
-            <Link
               href="/placeholder?page=login"
-              className="px-4 py-2 rounded-lg border border-[--color-border-strong] text-[13px] font-semibold text-[--color-nav-link] hover:border-[--color-text-primary] hover:text-[--color-nav-link-hover] transition-colors"
+              className="px-4 py-2 rounded-lg bg-[--color-btn-primary-bg] text-[--color-btn-primary-text] text-[13px] font-semibold hover:bg-[--color-btn-primary-hover] transition-colors"
             >
               {t(lang, 'nav.login')}
             </Link>
@@ -268,16 +262,9 @@ function HeaderInner() {
             })}
             <div className="pt-3 pb-1 border-t border-[--color-border] mt-2 flex gap-2.5">
               <Link
-                href="/placeholder?page=donate"
-                onClick={() => setOpen(false)}
-                className="flex-1 text-center px-4 py-2.5 rounded-xl bg-[--color-btn-primary-bg] text-[--color-btn-primary-text] text-[13px] font-semibold hover:bg-[--color-btn-primary-hover] transition-colors"
-              >
-                {t(lang, 'nav.donate')}
-              </Link>
-              <Link
                 href="/placeholder?page=login"
                 onClick={() => setOpen(false)}
-                className="flex-1 text-center px-4 py-2.5 rounded-xl border border-[--color-border-strong] text-[13px] font-semibold text-[--color-nav-link] hover:border-[--color-text-primary] transition-colors"
+                className="flex-1 text-center px-4 py-2.5 rounded-xl bg-[--color-btn-primary-bg] text-[--color-btn-primary-text] text-[13px] font-semibold hover:bg-[--color-btn-primary-hover] transition-colors"
               >
                 {t(lang, 'nav.login')}
               </Link>
