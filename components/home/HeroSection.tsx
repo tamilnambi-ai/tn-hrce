@@ -106,7 +106,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative w-full bg-white" style={{ height: 'clamp(432px, 61vh, 612px)' }}>
+    <section className="relative w-full bg-[#FAF6EE]" style={{ height: 'clamp(432px, 61vh, 612px)' }}>
 
       {/* ── Hero image — scaled down, centered, radial soft-edge fade ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-start justify-center">
@@ -135,8 +135,8 @@ export default function HeroSection() {
         <div ref={containerRef} className="relative w-full max-w-[640px]">
           <div
             className={cn(
-              'transition-all duration-200 bg-white shadow-hero-search overflow-hidden',
-              open && results.length ? 'rounded-t-2xl rounded-b-none bg-white' : 'rounded-2xl'
+              'transition-all duration-200 bg-[#FAF6EE] shadow-hero-search overflow-hidden',
+              open && results.length ? 'rounded-t-2xl rounded-b-none bg-[#FAF6EE]' : 'rounded-2xl'
             )}
           >
             {/* Heading row */}
@@ -186,7 +186,7 @@ export default function HeroSection() {
 
           {/* ── Dropdown results ── */}
           {open && (
-            <div className="absolute left-0 right-0 top-full bg-white rounded-b-2xl shadow-dropdown overflow-hidden search-dropdown z-50 border-t border-neutral-100">
+            <div className="absolute left-0 right-0 top-full bg-[#FAF6EE] rounded-b-2xl shadow-dropdown overflow-hidden search-dropdown z-50 border-t border-neutral-100">
               {results.length > 0 ? (
                 <>
                   <div className="px-5 py-2.5 border-b border-neutral-100">

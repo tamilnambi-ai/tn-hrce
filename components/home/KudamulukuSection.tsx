@@ -110,7 +110,7 @@ export default function KudamulukuSection() {
   const cityName = lang === 'ta' ? city.nameTa : city.name;
 
   return (
-    <section className="bg-white">
+    <section className="bg-[#FAF6EE]">
       <div className="container-page py-12 md:py-16">
         <div className="flex items-end justify-between mb-6 md:mb-8">
           <div>
